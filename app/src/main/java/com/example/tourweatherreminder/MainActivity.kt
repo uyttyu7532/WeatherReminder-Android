@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.startActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,12 +16,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         timelineRecyclerAdapter = TimelineRecyclerAdapter()
 
+
         recycler_view.adapter = timelineRecyclerAdapter
         recycler_view.layoutManager = LinearLayoutManager(this)
         timelineRecyclerAdapter.addWeatherHeader(cityWeather)
         for (i in 0..5) {
             timelineRecyclerAdapter.addTimepoint(timepoints[i])
-            timelineRecyclerAdapter.addWeather(weatherList[i])
+            timelineRecyclerAdapter.addSchedule(ScheduleList[i])
+        }
+
+        addFAB.setOnClickListener {
+            startActivity<AddActivity>()
         }
     }
 
@@ -39,14 +45,14 @@ class MainActivity : AppCompatActivity() {
             Timepoint("Next week", "Clear sky")
         )
 
-        val weatherList: ArrayList<Weather> = arrayListOf(
-            Weather("강남역에서 영화", "01:50", 24f),
-            Weather("건대입구", "Clear sky", 22.2f),
-            Weather("Tuesday", "Cloudy", 18.5f),
-            Weather("Wednesday", "Rain fall", 18f),
-            Weather("Thursday", "Sunny", 21.5f),
-            Weather("양막창", "eat", 21.5f),
-            Weather("Monday", "Windy", 19.7f, isLastItem = true)
+        val ScheduleList: ArrayList<Schedule> = arrayListOf(
+            Schedule("Sunny","영화", "2020-05-30 01:50", 24f,"강남역"),
+            Schedule("Windy","건대입구", "2020-05-31", 22.2f,"강남역"),
+            Schedule("Rain fall","성수역", "2020-05-31", 18.5f,"강남역"),
+            Schedule("Cloudy","춘천", "2020-05-31", 18f,"강남역"),
+            Schedule("Clear sky","강릉", "2020-06-02", 21.5f,"강남역"),
+            Schedule("Sunny","양막창", "2020-06-03", 21.5f,"신논현역"),
+            Schedule("Rain fall","떡볶이", "2020-06-03", 19.7f, "강남역",isLastItem = true)
         )
 
     }

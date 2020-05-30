@@ -23,11 +23,11 @@
             android:layout_width="50dp"
             android:layout_height="0dp"
             android:src="@drawable/ic_cloud"
-            app:layout_constraintBottom_toBottomOf="@id/weather_description"
-            app:layout_constraintTop_toTopOf="@id/date"/>
+            app:layout_constraintBottom_toBottomOf="@id/place"
+            app:layout_constraintTop_toTopOf="@id/title"/>
 
         <TextView
-            android:id="@+id/date"
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -37,7 +37,14 @@
             app:layout_constraintStart_toEndOf="@id/weather_icon"/>
 
         <TextView
-            android:id="@+id/weather_description"
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/title"
+            app:layout_constraintTop_toBottomOf="@id/title"/>
+
+        <TextView
+            android:id="@+id/place"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@id/date"

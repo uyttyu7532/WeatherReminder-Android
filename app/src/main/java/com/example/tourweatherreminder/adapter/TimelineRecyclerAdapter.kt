@@ -35,7 +35,7 @@ class TimelineRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
         notifyDataSetChanged()
     }
 
-    fun addWeather(item: Weather) {
+    fun addSchedule(item: Schedule) {
         this.items.add(item)
         notifyDataSetChanged()
     }

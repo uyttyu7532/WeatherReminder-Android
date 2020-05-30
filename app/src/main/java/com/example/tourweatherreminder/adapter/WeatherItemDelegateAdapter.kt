@@ -14,21 +14,22 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: ViewType) {
         holder as WeatherItemViewHolder
-        holder.bind(item as Weather)
+        holder.bind(item as Schedule)
     }
 
     inner class WeatherItemViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_weather, parent, false)) {
 
-        fun bind(item: Weather) = with(itemView) {
+        fun bind(item: Schedule) = with(itemView) {
             // If is last item we need to change position type to last.
             if (item.isLastItem) {
                 item_weather_timeline.position = MaterialTimelineView.POSITION_LAST
             }
+            title.text = item.title
             date.text = item.date
-            weather_description.text = item.weatherDescription
-            temperature_degree.text = "${item.temperature}\u00b0"
-            when (item.weatherDescription) {
+            temperature_degree.text = "${item.temp}\u00b0"
+            place.text = item.place
+            when (item.weather) {
                 "Sunny" -> {
                     item_weather_timeline.setBackgroundColor(ContextCompat.getColor(context, R.color.sunny))
                     weather_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_weather_sunny))
