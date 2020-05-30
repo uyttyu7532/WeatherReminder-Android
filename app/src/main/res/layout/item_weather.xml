@@ -30,25 +30,28 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text="title"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@id/weather_icon"/>
+            app:layout_constraintStart_toEndOf="@id/weather_icon" />
 
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="date"
             app:layout_constraintStart_toStartOf="@id/title"
-            app:layout_constraintTop_toBottomOf="@id/title"/>
+            app:layout_constraintTop_toBottomOf="@id/title" />
 
         <TextView
             android:id="@+id/place"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="place"
             app:layout_constraintStart_toStartOf="@id/date"
-            app:layout_constraintTop_toBottomOf="@id/date"/>
+            app:layout_constraintTop_toBottomOf="@id/date" />
 
         <TextView
             android:id="@+id/temperature_degree"
@@ -56,11 +59,12 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            android:text="temperature_degree"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </pl.hypeapp.materialtimelineview.MaterialTimelineView>
 
