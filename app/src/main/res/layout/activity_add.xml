@@ -1,22 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".AddActivity">
 
-    <Button
-        android:id="@+id/btn_all"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="all" />
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        >
 
-    <TextView
-        android:id="@+id/tv_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="18sp" />
+        <EditText
+            android:id="@+id/editTitleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="내용입력"
+            android:layout_margin="10dp"/>
 
-</LinearLayout>
+        <Button
+            android:id="@+id/addDateBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="날짜 및 시간 선택"
+            android:layout_margin="10dp"
+            />
+
+        <TextView
+            android:id="@+id/selectedDateText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="2020년 어쩌구"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/addPlaceBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="장소 선택"
+            android:layout_margin="10dp"/>
+
+        <TextView
+            android:id="@+id/selectedPlaceText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="강남역 어쩌구"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:text="확인" />
+
+    </LinearLayout>
+</FrameLayout>

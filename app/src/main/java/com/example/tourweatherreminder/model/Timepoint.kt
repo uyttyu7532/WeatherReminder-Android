@@ -1,9 +1,7 @@
 package com.example.tourweatherreminder
 
 
-data class Timepoint(
-    val timepoint: String,
-    val description: String
+class Timepoint(
 ) : ViewType {
 
     override fun getViewType(): Int = ViewType.LINE
