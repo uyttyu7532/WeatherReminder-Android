@@ -6,14 +6,5 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/searchBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="장소 검색" />
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 </LinearLayout>

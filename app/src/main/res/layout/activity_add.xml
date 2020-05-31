@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:hint="내용입력"
+            android:text="타이틀"
             android:layout_margin="10dp"/>
 
         <Button

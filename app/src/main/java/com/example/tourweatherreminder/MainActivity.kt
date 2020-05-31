@@ -1,5 +1,7 @@
 package com.example.tourweatherreminder
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,9 +22,29 @@ class MainActivity : AppCompatActivity() {
         resetAdapter()
 
         addFAB.setOnClickListener {
-            addSchedule("Sunny", "유튜브", "2020-06 01:50", 28f, "집", 37.504182, 127.026738)
-//            val intent = Intent(this, AddActivity::class.java)
-//            startActivity(intent)
+            //            addSchedule("Sunny", "유튜브", "2020-06 01:50", 28f, "집", 37.504182, 127.026738)
+            val intent = Intent(this, AddActivity::class.java)
+            startActivityForResult(intent, 100)
+
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                100 -> {
+                    addSchedule(
+                        "Sunny",
+                        data!!.getStringExtra("title").toString(),
+                        data!!.getStringExtra("date"),
+                        28f,
+                        data!!.getStringExtra("placeName"),
+                        data!!.getDoubleExtra("latitude",0.0),
+                        data!!.getDoubleExtra("longitude",0.0)
+                    )
+                }
+            }
         }
     }
 

@@ -1,5 +1,7 @@
 package com.example.tourweatherreminder
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -9,27 +11,25 @@ import com.jzxiang.pickerview.TimePickerDialog
 import com.jzxiang.pickerview.data.Type
 import com.jzxiang.pickerview.listener.OnDateSetListener
 import kotlinx.android.synthetic.main.activity_add.*
-import org.jetbrains.anko.startActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
-
-var latitude :Double = 23.057582
-var longitude :Double = 72.534458
-
 class AddActivity : AppCompatActivity(),
     OnDateSetListener {
+
+    var latitude: Double?=null
+    var longitude:Double?=null
+
     var mDialogAll: TimePickerDialog? = null
     var selectedDateText: TextView? = null
     var editTitleText: EditText? = null
+    var selectedPlaceText:TextView?=null
     var sf = SimpleDateFormat("yyyy-MM-dd HH:mm")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
         initView()
         createDatePickerDialog()
-
-
 
     }
 
@@ -60,21 +60,40 @@ class AddActivity : AppCompatActivity(),
 
     fun initView() {
         selectedDateText = findViewById<View>(R.id.selectedDateText) as TextView
+        selectedPlaceText = findViewById<View>(R.id.selectedPlaceText) as TextView
+        editTitleText = findViewById<View>(R.id.editTitleText) as EditText
+
         addDateBtn.setOnClickListener {
             mDialogAll!!.show(supportFragmentManager, "all")
         }
         addPlaceBtn.setOnClickListener {
-            startActivity<MapsActivity>()
+            val intent = Intent(this, MapsActivity::class.java)
+            startActivityForResult(intent, 100)
         }
         button.setOnClickListener {
-//            val mActivity = MainActivity()
-//            mActivity.addSchedule("Sunny", "유튜브", "2020-06 01:50", 28f, "집", 37.504182, 127.026738)
+            val intent = Intent()
+            intent.putExtra("title", editTitleText?.text.toString())
+            intent.putExtra("date", selectedDateText?.text.toString())
+            intent.putExtra("latitude", latitude)
+            intent.putExtra("longitude", longitude)
+            intent.putExtra("placeName",selectedPlaceText?.text.toString() )
+            setResult(Activity.RESULT_OK, intent)
+            finish()
         }
     }
 
-
-
-
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                100 -> {
+                    selectedPlaceText?.text = data!!.getStringExtra("placeName").toString()
+                    latitude = data.getDoubleExtra("latitude",0.0)
+                    longitude = data.getDoubleExtra("longitude",0.0)
+                }
+            }
+        }
+    }
 
 
     override fun onDateSet(
@@ -89,7 +108,6 @@ class AddActivity : AppCompatActivity(),
         val d = Date(time)
         return sf.format(d)
     }
-
 
 
 }
