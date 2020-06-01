@@ -11,13 +11,14 @@
     <pl.hypeapp.materialtimelineview.MaterialTimelineView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#f5be25"
+        android:background="#E1B0E3"
         android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:timeline_margin_start="32dp"
         app:timeline_position="first"
-        app:timeline_type="item">
+        app:timeline_type="item"
+        app:timeline_bottom_radio_color="@color/colorAccent">
 
         <ImageView
             android:id="@+id/weather_icon"

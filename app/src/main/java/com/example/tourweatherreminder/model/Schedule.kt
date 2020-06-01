@@ -6,6 +6,7 @@ data class Schedule(
     val title: String,
     val date: String,
     val temp: Float,
+    val rain: Int,
     val place: String,
     val lat: Double,
     val long: Double,

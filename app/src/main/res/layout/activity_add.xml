@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:text="날짜 및 시간 선택"
             android:layout_margin="10dp"
+            android:textColor="#000000"
             />
 
         <TextView
@@ -36,6 +37,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="2020년 어쩌구"
+            android:textColor="#000000"
             android:textSize="18sp" />
 
         <Button
@@ -43,7 +45,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="장소 선택"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:textColor="#000000"/>
 
         <TextView
             android:id="@+id/selectedPlaceText"
@@ -51,7 +54,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="강남역 어쩌구"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textColor="#000000"/>
 
         <Button
             android:id="@+id/button"
@@ -59,7 +63,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
-            android:text="확인" />
+            android:text="확인"
+            android:textColor="#000000"/>
 
     </LinearLayout>
 </FrameLayout>

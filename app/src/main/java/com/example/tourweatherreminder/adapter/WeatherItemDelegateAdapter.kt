@@ -33,6 +33,7 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
             title.text = item.title
             date.text = item.date
             temperature_degree.text = "${item.temp}\u00b0"
+            rain_percentage.text = item.rain.toString()+"%"
             place.text = item.place
 
             itemView.setOnClickListener {

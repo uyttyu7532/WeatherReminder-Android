@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#292929</color>
+    <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#1b1b1b</color>
     <color name="colorAccent">#484848</color>
-    <color name="sunny">#f5be25</color>
-    <color name="cloudy">#052e67</color>
-    <color name="clear">@android:color/holo_blue_light</color>
-    <color name="rain">#3e4c5e</color>
+    <color name="sunny">#FFCA28</color>
+    <color name="cloudy">#6983EA</color>
+    <color name="clear">#26C6DA</color>
+    <color name="rain">#6991B3</color>
 </resources>
