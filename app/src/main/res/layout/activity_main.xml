@@ -1,22 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addFAB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="20dp"
-        android:clickable="true"
-        android:src="@drawable/ic_add_black_24dp"
-        android:tint="#000000"
-        app:backgroundTint="#FFFFFF"/>
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -27,5 +13,26 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        app:fabAlignmentMode="end"
+        app:backgroundTint="#E62E2E2E"
+        app:hideOnScroll="true"/>
 
-</FrameLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:src="@drawable/ic_add_black_24dp"
+        android:tint="#ffffff"
+        app:backgroundTint="#E62E2E2E"
+        app:layout_anchor="@id/bar"/>
+
+
+
+    ​
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

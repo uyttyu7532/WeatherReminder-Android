@@ -11,17 +11,34 @@
     <pl.hypeapp.materialtimelineview.MaterialTimelineView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#AB38CD"
+        android:background="#2E2E2E"
         android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:timeline_margin_start="32dp"
         app:timeline_position="first"
-        app:timeline_type="item">
+        app:timeline_type="item"
+        app:timeline_bottom_radio_color="@color/colorAccent">
+
+        <ImageView
+            android:id="@+id/weather_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_weather_sunny"
+            app:layout_constraintBottom_toBottomOf="@id/city"
+            app:layout_constraintTop_toTopOf="@id/city"/>
+
+        <TextView
+            android:id="@+id/weather_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@id/city"
+            app:layout_constraintTop_toBottomOf="@+id/city"/>
 
         <TextView
             android:id="@+id/city"
-            android:text="춘천 2박3일 여행"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -30,6 +47,76 @@
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/weather_icon"/>
 
+        <TextView
+            android:id="@+id/temperature_degree"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/city"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/city"/>
+
+        <ImageView
+            android:id="@+id/umbrella"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_umbrella"
+            app:layout_constraintStart_toStartOf="@id/weather_icon"
+            app:layout_constraintTop_toBottomOf="@id/weather_description"/>
+
+        <TextView
+            android:id="@+id/rain_percentage"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="@id/umbrella"
+            app:layout_constraintStart_toEndOf="@id/umbrella"
+            app:layout_constraintTop_toTopOf="@id/umbrella"/>
+
+        <ImageView
+            android:id="@+id/cloud"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_cloud"
+            app:layout_constraintEnd_toStartOf="@id/wind_speed_icon"
+            app:layout_constraintStart_toStartOf="@id/rain_percentage"
+            app:layout_constraintTop_toTopOf="@id/umbrella"/>
+
+        <TextView
+            android:id="@+id/cloud_percentage"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="@id/cloud"
+            app:layout_constraintStart_toEndOf="@id/cloud"
+            app:layout_constraintTop_toTopOf="@id/cloud"/>
+
+        <TextView
+            android:id="@+id/wind_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/cloud"
+            app:layout_constraintEnd_toEndOf="@id/temperature_degree"
+            app:layout_constraintTop_toTopOf="@id/cloud"/>
+
+        <ImageView
+            android:id="@+id/wind_speed_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:src="@drawable/ic_wind"
+            app:layout_constraintBottom_toBottomOf="@id/cloud"
+            app:layout_constraintEnd_toStartOf="@id/wind_speed"
+            app:layout_constraintTop_toTopOf="@id/cloud"/>
 
     </pl.hypeapp.materialtimelineview.MaterialTimelineView>
 
