@@ -25,7 +25,6 @@ class SearchPlaceActivity : AppCompatActivity() {
         searchBtn.setOnClickListener {
             var intent = VanillaPlacePicker.Builder(this)
                 .with(PickerType.AUTO_COMPLETE)
-                .withLocation(37.504182, 127.026738) // 이전 위치에서 시작하게
                 .setPickerLanguage(PickerLanguage.ENGLISH)
                 .build()
             startActivityForResult(intent, KeyUtils.REQUEST_PLACE_PICKER)

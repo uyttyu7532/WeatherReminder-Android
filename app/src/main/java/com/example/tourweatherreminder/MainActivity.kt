@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        startJSONTask()
+
 
         resetAdapter()
 
@@ -34,16 +34,22 @@ class MainActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 100 -> {
+                    var title= data!!.getStringExtra("title")
+                    var placeName =  data!!.getStringExtra("placeName")
+                    var latitude= data!!.getDoubleExtra("latitude",0.0)
+                    var longitude =  data!!.getDoubleExtra("longitude",0.0)
+                    var timestamp = data!!.getLongExtra("timestamp",0)
                     addSchedule(
                         "Sunny",
-                        data!!.getStringExtra("title").toString(),
-                        data!!.getStringExtra("date"),
+                        title,
+                        timestamp.toString(),
                         28f,
                         0,
-                        data!!.getStringExtra("placeName"),
-                        data!!.getDoubleExtra("latitude",0.0),
-                        data!!.getDoubleExtra("longitude",0.0)
+                        placeName,
+                        latitude,
+                        longitude
                     )
+                    startJSONTask(latitude!!,longitude!!,timestamp!!)
                 }
             }
         }
