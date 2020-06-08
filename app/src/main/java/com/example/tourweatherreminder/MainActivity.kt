@@ -141,13 +141,7 @@ fun startJSONTask(
     val task = MainAsyncTask(context = MainActivity())
 
 
-//    timeStamp = timestamp / 1000
-//    var timeDiff = Math.abs(now - timeStamp!!)
-//    isHourly = timeDiff < 2 * 86400 // 2일(초)
-//    Log.i(
-//        "2일",
-//        now.toString() + " " + timeStamp.toString() + " " + isHourly.toString() + " " + timeDiff
-//    )
+
 
     var url =
         URL("https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&&appid=0278d360e035caa40fc3debf63523512&units=metric&exclude=minutely,current")
@@ -165,10 +159,13 @@ class MainAsyncTask(context: MainActivity) : AsyncTask<ForAsync, Unit, ForAsync>
         Log.i("위도파싱", params[0].latitude.toString())
         Log.i("경도파싱", params[0].longitude.toString())
 
+
+
         val doc = Jsoup.connect(params[0].url.toString()).ignoreContentType(true).get()
         val json = JSONObject(doc.text())
 
         timeStamp = params[0].timestamp / 1000 - getGMTOffset(json)
+        Log.i("now파싱", now.toString())
         Log.i("timeStamp파싱", timeStamp.toString())
         var timeDiff = Math.abs(now - timeStamp!!)
         Log.i("timeDiff파싱", timeDiff.toString())
@@ -178,7 +175,7 @@ class MainAsyncTask(context: MainActivity) : AsyncTask<ForAsync, Unit, ForAsync>
             parseHourly(json)
             findMinDiffDt(hourlyWeatherArray)
         } else {
-            parseDaily(json)
+            parseDaily(json,tempTime(params[0].date))
             findMinDiffDt(dailyWeatherArray)
         }
         return params[0]
@@ -224,7 +221,7 @@ class MainAsyncTask(context: MainActivity) : AsyncTask<ForAsync, Unit, ForAsync>
     }
 
 
-    fun parseDaily(json: JSONObject) {
+    fun parseDaily(json: JSONObject, tempTime:String) {
         dailyWeatherArray = arrayListOf<WeatherData>()
         val dailyWeather = json.getJSONArray("daily")
 //    Log.i("파싱daily", dailyWeather.toString())
@@ -233,7 +230,11 @@ class MainAsyncTask(context: MainActivity) : AsyncTask<ForAsync, Unit, ForAsync>
 
             var dt: Long = dailyWeather.getJSONObject(i).getString("dt").toLong()
             var temp: Float =
-                dailyWeather.getJSONObject(i).getJSONObject("temp").getString("day").toFloat()
+                dailyWeather.getJSONObject(i).getJSONObject("temp").getString(tempTime).toFloat()
+            Log.i("eve tempTime파싱",dailyWeather.getJSONObject(i).getJSONObject("temp").getString("eve").toString())
+            Log.i("morn tempTime파싱",dailyWeather.getJSONObject(i).getJSONObject("temp").getString("morn").toString())
+            Log.i("day tempTime파싱",dailyWeather.getJSONObject(i).getJSONObject("temp").getString("day").toString())
+            Log.i("night tempTime파싱",dailyWeather.getJSONObject(i).getJSONObject("temp").getString("night").toString())
             var icon: String =
                 dailyWeather.getJSONObject(i).getJSONArray("weather").getJSONObject(0)
                     .getString("icon")
@@ -287,19 +288,6 @@ class MainAsyncTask(context: MainActivity) : AsyncTask<ForAsync, Unit, ForAsync>
         Log.i("hourly파싱", hourlyWeatherArray.toString())
     }
 
-//    // GMT OFFSET 구하기
-//    fun getTimeZone(latitude: Double, longitude: Double): Long {
-//        Log.i("현재시각", System.currentTimeMillis().toString())
-//
-//        val doc =
-//            Jsoup.connect("http://api.timezonedb.com/v2.1/get-time-zone?key=PI4H35JYSR4T&format=json&by=position&lat=${latitude}&lng=${longitude}")
-//                .ignoreContentType(true).get()
-//        val json = JSONObject(doc.text())
-//        Log.i("timezone", json.toString())
-//        var gmtOffset = json.getString("gmtOffset")
-//        Log.i("gmtOffset", gmtOffset.toString())
-//        return gmtOffset.toLong()
-//    }
 
     fun getGMTOffset(json: JSONObject): Long {
         var GMToffset = json.getString("timezone_offset")
@@ -308,5 +296,34 @@ class MainAsyncTask(context: MainActivity) : AsyncTask<ForAsync, Unit, ForAsync>
         return GMToffset.toLong()
     }
 
+
+    fun tempTime(date: String):String {
+        // eve, morning, day, night 구분하기 위해서 시간별로 daily 날씨를 다르게 표시해야함!
+        // timestamp에서 시간들을 뽑아올 수 있느냐...(시차고려) -> add에서 애초에 분류를 해서 갖고오자!
+        // eve 24:00-06:00
+        // morning 06:00-12:00
+        // day 12:00-18:00
+        // night 18:00-24:00
+
+        var tempTime="null"
+
+        var hour = date?.split(":")?.get(0)?.split(" ")?.get(1)
+        Log.i("hour파싱",hour)
+        if(hour=="00"||hour=="01"||hour=="02"||hour=="03"||hour=="04"||hour=="05"){
+            tempTime = "eve"
+        }
+        else if(hour=="06"||hour=="07"||hour=="08"||hour=="09"||hour=="10"||hour=="11"){
+            tempTime = "morn"
+        }
+        else if(hour=="12"||hour=="13"||hour=="14"||hour=="15"||hour=="16"||hour=="17"){
+            tempTime = "day"
+        }
+        else{
+            tempTime = "night"
+        }
+        Log.i("tempTime파싱",tempTime)
+        return tempTime
+
+    }
 
 }

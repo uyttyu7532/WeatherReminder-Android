@@ -87,6 +87,7 @@ class AddActivity : AppCompatActivity(),
             intent.putExtra("longitude", longitude)
             intent.putExtra("placeName",selectedPlaceText?.text.toString())
             intent.putExtra("date",selectedDateText?.text.toString())
+
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
