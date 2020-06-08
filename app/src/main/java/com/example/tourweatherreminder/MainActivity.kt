@@ -58,8 +58,8 @@ class MainActivity : AppCompatActivity() {
                 100 -> {
                     var title = data!!.getStringExtra("title")
                     var place = data!!.getStringExtra("placeName")
-                    var latitude = data!!.getDoubleExtra("latitude", 0.0)
-                    var longitude = data!!.getDoubleExtra("longitude", 0.0)
+                    var latitude = data!!.getDoubleExtra("latitude", 37.521611)
+                    var longitude = data!!.getDoubleExtra("longitude", 127.046651)
                     var timestamp = data!!.getLongExtra("timestamp", 0)
                     var date = data!!.getStringExtra("date")
 
@@ -141,17 +141,17 @@ fun startJSONTask(
     val task = MainAsyncTask(context = MainActivity())
 
 
-    timeStamp = timestamp / 1000
-    var timeDiff = Math.abs(now - timeStamp!!)
-    isHourly = timeDiff < 2 * 86400 // 2일(초)
-    Log.i(
-        "2일",
-        now.toString() + " " + timeStamp.toString() + " " + isHourly.toString() + " " + timeDiff
-    )
+//    timeStamp = timestamp / 1000
+//    var timeDiff = Math.abs(now - timeStamp!!)
+//    isHourly = timeDiff < 2 * 86400 // 2일(초)
+//    Log.i(
+//        "2일",
+//        now.toString() + " " + timeStamp.toString() + " " + isHourly.toString() + " " + timeDiff
+//    )
 
     var url =
         URL("https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&&appid=0278d360e035caa40fc3debf63523512&units=metric&exclude=minutely,current")
-    var forAsync = ForAsync(url,title, date, place)
+    var forAsync = ForAsync(url, title, date, timestamp, place, latitude, longitude)
 
     task.execute(forAsync)
 }
@@ -160,11 +160,20 @@ fun startJSONTask(
 // 비동기
 class MainAsyncTask(context: MainActivity) : AsyncTask<ForAsync, Unit, ForAsync>() {
 
-    override fun doInBackground(vararg params:ForAsync): ForAsync? {
+    override fun doInBackground(vararg params: ForAsync): ForAsync? {
 
-        Log.i("파람",params[0].url.toString())
+        Log.i("위도파싱", params[0].latitude.toString())
+        Log.i("경도파싱", params[0].longitude.toString())
+
         val doc = Jsoup.connect(params[0].url.toString()).ignoreContentType(true).get()
         val json = JSONObject(doc.text())
+
+        timeStamp = params[0].timestamp / 1000 - getGMTOffset(json)
+        Log.i("timeStamp파싱", timeStamp.toString())
+        var timeDiff = Math.abs(now - timeStamp!!)
+        Log.i("timeDiff파싱", timeDiff.toString())
+        isHourly = timeDiff < 2 * 86400 // 2일(초)
+
         if (isHourly) {
             parseHourly(json)
             findMinDiffDt(hourlyWeatherArray)
@@ -208,8 +217,8 @@ class MainAsyncTask(context: MainActivity) : AsyncTask<ForAsync, Unit, ForAsync>
             }
 
         }
-        Log.i("최종least", least.toString())
-        Log.i("최종leastDiffData", leastDiffData.toString())
+        Log.i("최종least파싱", least.toString())
+        Log.i("최종leastDiffData파싱", leastDiffData.toString())
 
         return leastDiffData as WeatherData
     }
@@ -278,6 +287,26 @@ class MainAsyncTask(context: MainActivity) : AsyncTask<ForAsync, Unit, ForAsync>
         Log.i("hourly파싱", hourlyWeatherArray.toString())
     }
 
+//    // GMT OFFSET 구하기
+//    fun getTimeZone(latitude: Double, longitude: Double): Long {
+//        Log.i("현재시각", System.currentTimeMillis().toString())
+//
+//        val doc =
+//            Jsoup.connect("http://api.timezonedb.com/v2.1/get-time-zone?key=PI4H35JYSR4T&format=json&by=position&lat=${latitude}&lng=${longitude}")
+//                .ignoreContentType(true).get()
+//        val json = JSONObject(doc.text())
+//        Log.i("timezone", json.toString())
+//        var gmtOffset = json.getString("gmtOffset")
+//        Log.i("gmtOffset", gmtOffset.toString())
+//        return gmtOffset.toLong()
+//    }
+
+    fun getGMTOffset(json: JSONObject): Long {
+        var GMToffset = json.getString("timezone_offset")
+        Log.i("파싱offset", GMToffset)
+
+        return GMToffset.toLong()
+    }
 
 
 }
