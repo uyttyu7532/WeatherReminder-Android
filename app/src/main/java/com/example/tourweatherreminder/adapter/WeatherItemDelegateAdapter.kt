@@ -83,7 +83,7 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
                         )
                     )
                 }
-                "Clear sky" -> {
+                "02d" -> { // clear sky
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
@@ -97,7 +97,7 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
                         )
                     )
                 }
-                "Windy" -> {
+                "04d" -> { // windy
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,

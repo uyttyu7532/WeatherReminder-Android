@@ -20,12 +20,14 @@ class AddActivity : AppCompatActivity(),
     var latitude: Double?=null
     var longitude:Double?=null
     var timestamp:Long?=null
+    var date:String?=null
 
     var mDialogAll: TimePickerDialog? = null
     var selectedDateText: TextView? = null
     var editTitleText: EditText? = null
     var selectedPlaceText:TextView?=null
     var sf = SimpleDateFormat("yyyy-MM-dd HH:mm")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
@@ -64,20 +66,27 @@ class AddActivity : AppCompatActivity(),
         selectedPlaceText = findViewById<View>(R.id.selectedPlaceText) as TextView
         editTitleText = findViewById<View>(R.id.editTitleText) as EditText
 
+        // 날짜 및 시간 선택 버튼
         addDateBtn.setOnClickListener {
             mDialogAll!!.show(supportFragmentManager, "all")
         }
+
+        // 장소 선택 버튼
         addPlaceBtn.setOnClickListener {
             val intent = Intent(this, MapsActivity::class.java)
             startActivityForResult(intent, 100)
         }
+
+        // 확인 버튼
         button.setOnClickListener {
             val intent = Intent()
-            intent.putExtra("title", editTitleText?.text.toString())
+            var title=editTitleText?.text.toString()
+            intent.putExtra("title", title)
             intent.putExtra("timestamp", timestamp)
             intent.putExtra("latitude", latitude)
             intent.putExtra("longitude", longitude)
             intent.putExtra("placeName",selectedPlaceText?.text.toString())
+            intent.putExtra("date",selectedDateText?.text.toString())
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
@@ -92,6 +101,7 @@ class AddActivity : AppCompatActivity(),
                     latitude = data.getDoubleExtra("latitude",0.0)
                     longitude = data.getDoubleExtra("longitude",0.0)
                     timestamp = data.getLongExtra("timestamp",0)
+                    date=data.getStringExtra("date")
                 }
             }
         }
@@ -102,10 +112,10 @@ class AddActivity : AppCompatActivity(),
         timePickerDialog: TimePickerDialog,
         millseconds: Long
     ) {
-        val text = getDateToString(millseconds)
-        selectedDateText!!.text = text
+        val dateToString = getDateToString(millseconds)
+        date=dateToString
+        selectedDateText!!.text = dateToString
         timestamp = millseconds
-//        selectedDateText!!.text=timestamp.toString()
     }
 
     fun getDateToString(time: Long): String {
