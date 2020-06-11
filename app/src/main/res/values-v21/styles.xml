@@ -1,6 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-
 
     <style name="AppTheme" parent="Theme.Design.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -8,6 +7,6 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColor">#FFF</item>
         <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:navigationBarColor">@color/windowBackground</item>
     </style>
-
 </resources>

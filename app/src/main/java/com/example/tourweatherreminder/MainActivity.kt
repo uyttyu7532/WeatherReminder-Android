@@ -2,7 +2,9 @@ package com.example.tourweatherreminder
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,6 +32,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
 
         recyclerView = this.findViewById(R.id.recycler_view)
 
@@ -103,20 +107,23 @@ class MainActivity : AppCompatActivity() {
         )
 
         val ScheduleList: ArrayList<Schedule> = arrayListOf(
-            Schedule("Sunny", "영화", "2020-05-30 01:50", 24f, 30.0f, "강남역"),
-            Schedule("Windy", "건대입구", "2020-05-31", 22.2f, 20.0f, "강남역"),
-            Schedule("Rain fall", "성수역", "2020-05-31", 18.5f, 50.0f, "강남역"),
-            Schedule("Cloudy", "춘천", "2020-05-31", 18f, 70.0f, "강남역"),
-            Schedule("Clear sky", "강릉", "2020-06-02", 21.5f, 10.0f, "강남역"),
-            Schedule("Sunny", "양막창", "2020-06-03", 21.5f, 0.0f, "신논현역"),
+            Schedule("01d", "양막창", "2020-06-03", 21.5f, 0.0f, "신논현역"),
+            Schedule("02d", "영화", "2020-05-30 01:50", 24f, 30.0f, "강남역"),
+            Schedule("03d", "건대입구", "2020-05-31", 22.2f, 20.0f, "강남역"),
+            Schedule("04d", "성수역", "2020-05-31", 18.5f, 50.0f, "강남역"),
+            Schedule("09d", "춘천", "2020-05-31", 18f, 70.0f, "강남역"),
+            Schedule("10d", "강릉", "2020-06-02", 21.5f, 10.0f, "강남역"),
+            Schedule("11d", "양막창", "2020-06-03", 21.5f, 0.0f, "신논현역"),
+            Schedule("13d", "양막창", "2020-06-03", 21.5f, 0.0f, "신논현역"),
             Schedule(
-                "Rain fall",
+                "50d",
                 "떡볶이",
                 "2020-06-03",
                 19.7f, 10.0f,
                 "강남역",
                 isLastItem = true
             )
+
         )
 
     }

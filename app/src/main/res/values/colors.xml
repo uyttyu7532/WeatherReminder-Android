@@ -2,9 +2,26 @@
 <resources>
     <color name="colorPrimary">#484848</color>
     <color name="colorPrimaryDark">#1b1b1b</color>
-    <color name="colorAccent">#EFEFEF</color>
-    <color name="sunny">#FFCA28</color>
-    <color name="cloudy">#6983EA</color>
-    <color name="clear">#26C6DA</color>
+    <color name="colorAccent">#2E2E2E</color>
     <color name="rain">#6991B3</color>
+<!--    해-->
+    <color name="icon01d">#FFCA28</color>
+<!--  구름+해  -->
+    <color name="icon02d">#FBDB31</color>
+<!--   구름 -->
+    <color name="icon03d">#42A5F5</color>
+<!--   먹구름 -->
+    <color name="icon04d">#808080</color>
+<!--  소나기  -->
+    <color name="icon09d">#3480BD</color>
+<!--  비  -->
+    <color name="icon10d">#364B75</color>
+<!--   천둥번개 -->
+    <color name="icon11d">#5F6CB8</color>
+<!--   눈 -->
+    <color name="icon13d">#70D2FA</color>
+<!--    안개-->
+    <color name="icon50d">#B6B6B6</color>
+    <color name="windowBackground">#232323</color>
+    <color name="timelinecolor">#F3EEEE</color>
 </resources>

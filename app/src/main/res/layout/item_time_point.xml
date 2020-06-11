@@ -7,8 +7,10 @@
     android:padding="16dp"
     app:timeline_margin_start="32dp"
     app:timeline_position="middle"
+    app:timeline_top_radio_color="@color/timelinecolor"
+    app:timeline_bottom_radio_color="@color/timelinecolor"
     app:timeline_type="line"
-    app:timeline_line_color="@color/colorAccent">
+    app:timeline_line_color="@color/timelinecolor">
 
 <!--    <TextView-->
 <!--        android:id="@+id/time"-->

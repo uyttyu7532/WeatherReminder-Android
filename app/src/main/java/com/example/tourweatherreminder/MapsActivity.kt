@@ -1,13 +1,16 @@
 package com.example.tourweatherreminder
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.vanillaplacepicker.presentation.builder.VanillaPlacePicker
@@ -19,23 +22,27 @@ import kotlinx.android.synthetic.main.activity_maps.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    var latitude: Double = 23.057582
-    var longitude: Double = 72.534458
-    var placeName:String = "선택한 장소"
+    var latitude: Double = 37.506361
+    var longitude: Double = 127.026395
+    var placeName: String = "선택한 장소"
 
-    private lateinit var mMap: GoogleMap
+    var fusedLocationProviderClient: FusedLocationProviderClient? = null
+    var loc = LatLng(latitude, longitude)
+    val arrLoc = ArrayList<LatLng>()
+
+    private lateinit var mMap: GoogleMap // onMapReady에서 초기화 됨
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        mapFragment.getMapAsync(this) // onMapReadyCallback 인터페이스 구현
         init()
     }
 
-    fun init(){
+
+    fun init() {
         searchBtn.setOnClickListener {
             var intent = VanillaPlacePicker.Builder(this)
                 .withLocation(latitude, longitude) // 이전 위치에서 시작하게
@@ -68,7 +75,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         placeName = it.name!!
 //                        Toast.makeText(this, it.latitude.toString() + " " + it.longitude.toString(), Toast.LENGTH_SHORT).show()
                         var selectedLocation = LatLng(latitude, longitude)
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedLocation,15F))
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedLocation, 15F))
                         mMap.addMarker(MarkerOptions().position(selectedLocation).title(placeName))
 
                     }
@@ -78,22 +85,34 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+
+    // OnMapReadyCallback - 맵이 사용할 준비가 다 됐어~
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-
         // Add a marker in Sydney and move the camera
-//        val sydney = LatLng(-34.0, 151.0)
-//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        val myLocation = LatLng(latitude, longitude) // 현재 위치
+        mMap.addMarker(
+            MarkerOptions().position(myLocation).title("선택한 위치")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
+                .snippet("이 위치로 선택하시겠습니까?")
+        ).showInfoWindow()
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 16.0f))
+        initMapListener()
     }
+
+    fun initMapListener() {
+        mMap.setOnMapClickListener {
+            mMap.clear()
+            latitude = it.latitude
+            longitude = it.longitude
+            mMap.addMarker(
+                MarkerOptions().position(it).title("선택한 위치")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
+                    .snippet("이 위치로 선택하시겠습니까?")
+            ).showInfoWindow()
+        }
+    }
+
+
 }

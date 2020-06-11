@@ -16,15 +16,15 @@
         app:timeline_margin_start="32dp"
         app:timeline_position="middle"
         app:timeline_type="item"
-        app:timeline_bottom_radio_color="@color/colorAccent"
-        app:timeline_top_radio_color="@color/colorAccent"
+        app:timeline_bottom_radio_color="@color/timelinecolor"
+        app:timeline_top_radio_color="@color/timelinecolor"
         android:outlineAmbientShadowColor="@color/colorAccent"
         android:outlineSpotShadowColor="@color/colorAccent">
 
         <ImageView
             android:id="@+id/weather_icon"
-            android:layout_width="50dp"
-            android:layout_height="0dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:src="@drawable/ic_cloud"
             app:layout_constraintBottom_toBottomOf="@id/place"
             app:layout_constraintTop_toTopOf="@id/title" />

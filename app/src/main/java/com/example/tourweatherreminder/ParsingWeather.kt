@@ -34,8 +34,6 @@ class MainAsyncTask(context: MainActivity) : AsyncTask<ForAsync, Unit, ForAsync>
         Log.i("위도파싱", params[0].latitude.toString())
         Log.i("경도파싱", params[0].longitude.toString())
 
-
-
         val doc = Jsoup.connect(params[0].url.toString()).ignoreContentType(true).get()
         val json = JSONObject(doc.text())
 
@@ -184,13 +182,13 @@ class MainAsyncTask(context: MainActivity) : AsyncTask<ForAsync, Unit, ForAsync>
 
         var hour = date?.split(":")?.get(0)?.split(" ")?.get(1)
         Log.i("hour파싱",hour)
-        if(hour=="00"||hour=="01"||hour=="02"||hour=="03"||hour=="04"||hour=="05"){
+        if(hour=="17"||hour=="18"||hour=="19"||hour=="20"||hour=="21"){
             tempTime = "eve"
         }
         else if(hour=="06"||hour=="07"||hour=="08"||hour=="09"||hour=="10"||hour=="11"){
             tempTime = "morn"
         }
-        else if(hour=="12"||hour=="13"||hour=="14"||hour=="15"||hour=="16"||hour=="17"){
+        else if(hour=="12"||hour=="13"||hour=="14"||hour=="15"||hour=="16"){
             tempTime = "day"
         }
         else{
