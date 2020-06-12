@@ -26,9 +26,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     var longitude: Double = 127.026395
     var placeName: String = "선택한 장소"
 
-    var fusedLocationProviderClient: FusedLocationProviderClient? = null
-    var loc = LatLng(latitude, longitude)
-    val arrLoc = ArrayList<LatLng>()
 
     private lateinit var mMap: GoogleMap // onMapReady에서 초기화 됨
 

@@ -4,12 +4,24 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
+import com.example.tourweatherreminder.MainActivity.AddSchedule.addSchedule
 import com.example.tourweatherreminder.MainActivity.AddSchedule.resetAdapter
+import com.example.tourweatherreminder.db.AppDatabase
+import com.example.tourweatherreminder.db.dao.DataDao
+import com.example.tourweatherreminder.db.entity.ScheduleEntity
+import com.example.tourweatherreminder.model.ForAsync
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.net.URL
 import java.util.*
 
 
@@ -34,7 +46,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-
         recyclerView = this.findViewById(R.id.recycler_view)
 
         resetAdapter()
@@ -43,9 +54,12 @@ class MainActivity : AppCompatActivity() {
         addFAB.setOnClickListener {
             val intent = Intent(this, AddActivity::class.java)
             startActivityForResult(intent, 100)
-
         }
+
+
     }
+
+
 
     // addActivity에서 돌아온 결과
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -61,7 +75,14 @@ class MainActivity : AppCompatActivity() {
                     var date = data!!.getStringExtra("date")
 
 
-                    startJSONTask(title, place, latitude, longitude, timestamp, date)
+//                    startJSONTask(title, place, latitude, longitude, timestamp, date)
+
+
+                    var url =
+                        URL("https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&&appid=0278d360e035caa40fc3debf63523512&units=metric&exclude=minutely,current")
+                    var forAsync = ForAsync(url, title, date, timestamp, place, latitude, longitude)
+
+                    val task = MainAsyncTask(applicationContext).execute(forAsync)
                 }
             }
         }
@@ -99,12 +120,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+
+
+
+
+
     // TODO db와 연결해서 데이터 설정해야함
     companion object FakeData {
         val cityWeather: CityWeather = CityWeather(
             "Warsaw",
             "Sunny", 21.5f, "5%", "56%", "25km/h"
         )
+
+
 
         val ScheduleList: ArrayList<Schedule> = arrayListOf(
             Schedule("01d", "양막창", "2020-06-03", 21.5f, 0.0f, "신논현역"),
