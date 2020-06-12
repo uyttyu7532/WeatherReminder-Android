@@ -1,22 +1,17 @@
 package com.example.tourweatherreminder
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
-import com.example.tourweatherreminder.MainActivity.AddSchedule.addSchedule
 import com.example.tourweatherreminder.MainActivity.AddSchedule.resetAdapter
 import com.example.tourweatherreminder.db.AppDatabase
-import com.example.tourweatherreminder.db.dao.DataDao
 import com.example.tourweatherreminder.db.entity.ScheduleEntity
 import com.example.tourweatherreminder.model.ForAsync
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,31 +19,31 @@ import kotlinx.coroutines.launch
 import java.net.URL
 import java.util.*
 
-
 var dailyWeatherArray = arrayListOf<WeatherData>()
 var hourlyWeatherArray = arrayListOf<WeatherData>()
-
 var leastDiffData: WeatherData? = null
-
 var now = System.currentTimeMillis() / 1000
 var isHourly = false
 var timeStamp: Long? = null
-
 lateinit var timelineRecyclerAdapter: TimelineRecyclerAdapter
-
 lateinit var recyclerView: RecyclerView
+var ScheduleList: ArrayList<ScheduleEntity> = arrayListOf()
+
+var data:List<ScheduleEntity> ?=null
+
+lateinit var mContext:Context
 
 class MainActivity : AppCompatActivity() {
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        mContext = this.applicationContext
 
         recyclerView = this.findViewById(R.id.recycler_view)
 
-        resetAdapter()
+//        resetAdapter()
 
         // 일정추가 FAB
         addFAB.setOnClickListener {
@@ -56,9 +51,17 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(intent, 100)
         }
 
+        val appDatabase = AppDatabase
+        CoroutineScope(Dispatchers.IO).launch {
+            ScheduleList.clear()
+            data = appDatabase?.getInstance(applicationContext)?.DataDao()?.getData()
+            Log.d("뭐가 저장되어 있니?", data.toString())
+            data?.forEach { ScheduleList.add(it) }
+            resetAdapter()
+        }
+
 
     }
-
 
 
     // addActivity에서 돌아온 결과
@@ -74,15 +77,11 @@ class MainActivity : AppCompatActivity() {
                     var timestamp = data!!.getLongExtra("timestamp", 0)
                     var date = data!!.getStringExtra("date")
 
-
-//                    startJSONTask(title, place, latitude, longitude, timestamp, date)
-
-
                     var url =
                         URL("https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&&appid=0278d360e035caa40fc3debf63523512&units=metric&exclude=minutely,current")
                     var forAsync = ForAsync(url, title, date, timestamp, place, latitude, longitude)
 
-                    val task = MainAsyncTask(applicationContext).execute(forAsync)
+                    MainAsyncTask(applicationContext).execute(forAsync)
                 }
             }
         }
@@ -93,12 +92,13 @@ class MainActivity : AppCompatActivity() {
 
         // 리사이클러 뷰 시간순으로 정렬 후 다시 보이기
         fun resetAdapter() {
-            Collections.sort(ScheduleList, object : Comparator<Schedule> {
-                override fun compare(x: Schedule, y: Schedule) = x.date.compareTo(y.date)
+            Collections.sort(ScheduleList, object : Comparator<ScheduleEntity> {
+                override fun compare(x: ScheduleEntity, y: ScheduleEntity) =
+                    x.date.compareTo(y.date)
             })
             timelineRecyclerAdapter = TimelineRecyclerAdapter()
             recyclerView.adapter = timelineRecyclerAdapter
-            recyclerView.layoutManager = LinearLayoutManager(MainActivity())
+            recyclerView.layoutManager = LinearLayoutManager(mContext)
             timelineRecyclerAdapter.addWeatherHeader(cityWeather)
             for (i in 0 until ScheduleList.size) {
                 timelineRecyclerAdapter.addTimepoint(Timepoint())
@@ -108,6 +108,7 @@ class MainActivity : AppCompatActivity() {
 
         // 일정 추가
         fun addSchedule(
+            id: Long,
             weather: String,
             title: String,
             date: String,
@@ -115,45 +116,17 @@ class MainActivity : AppCompatActivity() {
             rain: Float,
             place: String
         ) {
-            ScheduleList.add(Schedule(weather, title, date, temp, rain, place))
+            ScheduleList.add(ScheduleEntity(10,weather, title, date, temp, rain, place))
             resetAdapter()
         }
     }
 
-
-
-
-
-
-
-    // TODO db와 연결해서 데이터 설정해야함
     companion object FakeData {
         val cityWeather: CityWeather = CityWeather(
             "Warsaw",
             "Sunny", 21.5f, "5%", "56%", "25km/h"
         )
 
-
-
-        val ScheduleList: ArrayList<Schedule> = arrayListOf(
-            Schedule("01d", "양막창", "2020-06-03", 21.5f, 0.0f, "신논현역"),
-            Schedule("02d", "영화", "2020-05-30 01:50", 24f, 30.0f, "강남역"),
-            Schedule("03d", "건대입구", "2020-05-31", 22.2f, 20.0f, "강남역"),
-            Schedule("04d", "성수역", "2020-05-31", 18.5f, 50.0f, "강남역"),
-            Schedule("09d", "춘천", "2020-05-31", 18f, 70.0f, "강남역"),
-            Schedule("10d", "강릉", "2020-06-02", 21.5f, 10.0f, "강남역"),
-            Schedule("11d", "양막창", "2020-06-03", 21.5f, 0.0f, "신논현역"),
-            Schedule("13d", "양막창", "2020-06-03", 21.5f, 0.0f, "신논현역"),
-            Schedule(
-                "50d",
-                "떡볶이",
-                "2020-06-03",
-                19.7f, 10.0f,
-                "강남역",
-                isLastItem = true
-            )
-
-        )
 
     }
 }

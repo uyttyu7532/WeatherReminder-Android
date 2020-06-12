@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.tourweatherreminder.db.entity.ScheduleEntity
 import kotlinx.android.synthetic.main.item_weather.view.*
 import pl.hypeapp.materialtimelineview.MaterialTimelineView
 
@@ -17,7 +18,7 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: ViewType) {
         holder as WeatherItemViewHolder
-        holder.bind(item as Schedule)
+        holder.bind(item as ScheduleEntity)
     }
 
     inner class WeatherItemViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
@@ -25,11 +26,11 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
     ) {
 
 
-        fun bind(item: Schedule) = with(itemView) {
+        fun bind(item: ScheduleEntity) = with(itemView) {
             // If is last item we need to change position type to last.
-            if (item.isLastItem) {
-                item_weather_timeline.position = MaterialTimelineView.POSITION_LAST
-            }
+//            if (item.isLastItem) {
+//                item_weather_timeline.position = MaterialTimelineView.POSITION_LAST
+//            }
             title.text = item.title
             date.text = item.date
             temperature_degree.text = "${item.temp}\u00b0"
@@ -40,16 +41,6 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
                 Toast.makeText(it.context, adapterPosition.toString(), Toast.LENGTH_SHORT).show()
             }
 
-
-//            01d 해
-//            02d 구름+해
-//            03d 구름
-//            04d 먹구름
-//            09d 소나기
-//            10d 비
-//            11d 천둥번개
-//            13d 눈
-//            50d 안개
 
             when (item.weather) {
                 "01d" -> { //해

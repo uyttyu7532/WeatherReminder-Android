@@ -6,6 +6,8 @@ import android.util.Log
 import com.example.tourweatherreminder.db.AppDatabase
 import com.example.tourweatherreminder.db.entity.ScheduleEntity
 import com.example.tourweatherreminder.model.ForAsync
+import io.reactivex.Observable
+import io.reactivex.Single
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,9 +24,7 @@ class MainAsyncTask(context: Context) : AsyncTask<ForAsync, Unit, ForAsync>() {
     private var contextRef: WeakReference<Context>? = null
     val mContext = context
 
-
     override fun doInBackground(vararg params: ForAsync): ForAsync? {
-
 
         Log.i("위도파싱", params[0].latitude.toString())
         Log.i("경도파싱", params[0].longitude.toString())
@@ -52,25 +52,34 @@ class MainAsyncTask(context: Context) : AsyncTask<ForAsync, Unit, ForAsync>() {
 
     override fun onPostExecute(result: ForAsync) {
         super.onPostExecute(result)
-        MainActivity.AddSchedule.addSchedule(
-            leastDiffData!!.icon,
-            result.title,
-            result.date,
-            leastDiffData!!.temp,
-            leastDiffData!!.rain,
-            result.place
-        )
+//        MainActivity.AddSchedule.addSchedule(
+//            leastDiffData!!.icon,
+//            result.title,
+//            result.date,
+//            leastDiffData!!.temp,
+//            leastDiffData!!.rain,
+//            result.place
+//        )
 
         contextRef = WeakReference(mContext)
         val context = contextRef!!.get()
-        if(context != null){
+        if (context != null) {
             val appDatabase = AppDatabase
-            val scheduleEntity = ScheduleEntity(3, leastDiffData!!.icon, result.title, result.date, leastDiffData!!.temp, leastDiffData!!.rain,  result.place)
+            val scheduleEntity = ScheduleEntity(
+                6,
+                leastDiffData!!.icon,
+                result.title,
+                result.date,
+                leastDiffData!!.temp,
+                leastDiffData!!.rain,
+                result.place
+            )
             CoroutineScope(Dispatchers.IO).launch {
                 appDatabase?.getInstance(context)?.DataDao()?.insertSchedule(scheduleEntity)
-                val data = appDatabase?.getInstance(context)?.DataDao()?.getData()
-                Log.d("뭐가 저장되어 있니?",data.toString())
             }
+            ScheduleList?.add(scheduleEntity)
+            MainActivity.AddSchedule.resetAdapter()
+
         }
 
 
@@ -80,25 +89,16 @@ class MainAsyncTask(context: Context) : AsyncTask<ForAsync, Unit, ForAsync>() {
         var diff: Long = Math.abs(WeatherArray[0].dt - timeStamp!!)
 
         var least: Long = diff
-//        Log.i("첫diff", diff.toString())
-//        Log.i("첫least", least.toString())
         leastDiffData = WeatherArray[0]
 
         for (i in 1..WeatherArray.size - 1) {
-//            Log.i("WeatherArray[i].dt", WeatherArray[i].dt.toString())
             diff = Math.abs(WeatherArray[i].dt - timeStamp!!)
-//            Log.i("diff", diff.toString())
             if (diff < least) {
                 least = diff
                 leastDiffData = WeatherArray[i]
-//                Log.i("least", least.toString())
-//                Log.i("leastDiffData", leastDiffData.toString())
             }
 
         }
-        Log.i("최종least파싱", least.toString())
-        Log.i("최종leastDiffData파싱", leastDiffData.toString())
-
         return leastDiffData as WeatherData
     }
 
@@ -113,40 +113,16 @@ class MainAsyncTask(context: Context) : AsyncTask<ForAsync, Unit, ForAsync>() {
             var dt: Long = dailyWeather.getJSONObject(i).getString("dt").toLong()
             var temp: Float =
                 dailyWeather.getJSONObject(i).getJSONObject("temp").getString(tempTime).toFloat()
-            Log.i(
-                "eve tempTime파싱",
-                dailyWeather.getJSONObject(i).getJSONObject("temp").getString("eve").toString()
-            )
-            Log.i(
-                "morn tempTime파싱",
-                dailyWeather.getJSONObject(i).getJSONObject("temp").getString("morn").toString()
-            )
-            Log.i(
-                "day tempTime파싱",
-                dailyWeather.getJSONObject(i).getJSONObject("temp").getString("day").toString()
-            )
-            Log.i(
-                "night tempTime파싱",
-                dailyWeather.getJSONObject(i).getJSONObject("temp").getString("night").toString()
-            )
             var icon: String =
                 dailyWeather.getJSONObject(i).getJSONArray("weather").getJSONObject(0)
                     .getString("icon")
 
-//        Log.i("파싱dt", dailyWeather.getJSONObject(i).getString("dt"))
-//        Log.i("파싱temp", dailyWeather.getJSONObject(i).getJSONObject("temp").getString("day"))
-//        Log.i(
-//            "파싱icon",
-//            dailyWeather.getJSONObject(i).getJSONArray("weather").getJSONObject(0).getString("icon")
-//        )
             var tmp = dailyWeather.getJSONObject(i)
             var rain: Float? = 0.0f
             if (!tmp.isNull("rain")) {
                 rain = dailyWeather.getJSONObject(i).getString("rain").toFloat()
-//            Log.i("파싱dailyrain", dailyWeather.getJSONObject(i).getString("rain"))
             } else {
                 rain = 0.0f
-//            Log.i("파싱dailyrain", "0")
             }
             dailyWeatherArray.add(WeatherData(dt, temp, icon, rain))
         }
@@ -162,21 +138,13 @@ class MainAsyncTask(context: Context) : AsyncTask<ForAsync, Unit, ForAsync>() {
             var icon: String =
                 hourlyWeather.getJSONObject(i).getJSONArray("weather").getJSONObject(0)
                     .getString("icon")
-//            Log.i("파싱dt", hourlyWeather.getJSONObject(i).getString("dt"))
-//        Log.i("파싱temp", hourlyWeather.getJSONObject(i).getString("temp"))
-//        Log.i(
-//            "파싱icon",
-//            hourlyWeather.getJSONObject(i).getJSONArray("weather").getJSONObject(0).getString("icon")
-//        )
             var rain: Float? = null
             var tmp = hourlyWeather.getJSONObject(i)
             if (!tmp.isNull("rain")) {
                 rain = tmp.getJSONObject("rain").getString("1h").toFloat()
-//                Log.i("파싱rain", tmp.getJSONObject("rain").getString("1h"))
             } else {
                 rain = 0.0f
             }
-
             hourlyWeatherArray.add(WeatherData(dt, temp, icon, rain))
         }
         Log.i("hourly파싱", hourlyWeatherArray.toString())
@@ -192,12 +160,6 @@ class MainAsyncTask(context: Context) : AsyncTask<ForAsync, Unit, ForAsync>() {
 
 
     fun tempTime(date: String): String {
-        // eve, morning, day, night 구분하기 위해서 시간별로 daily 날씨를 다르게 표시해야함!
-        // timestamp에서 시간들을 뽑아올 수 있느냐...(시차고려) -> add에서 애초에 분류를 해서 갖고오자!
-        // eve 24:00-06:00
-        // morning 06:00-12:00
-        // day 12:00-18:00
-        // night 18:00-24:00
 
         var tempTime = "null"
 

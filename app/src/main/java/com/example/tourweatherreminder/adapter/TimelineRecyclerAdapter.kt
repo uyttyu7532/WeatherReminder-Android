@@ -3,6 +3,7 @@ package com.example.tourweatherreminder
 import android.view.ViewGroup
 import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.tourweatherreminder.db.entity.ScheduleEntity
 
 
 class TimelineRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -38,7 +39,7 @@ class TimelineRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
         notifyDataSetChanged()
     }
 
-    fun addSchedule(item: Schedule) {
+    fun addSchedule(item: ScheduleEntity) {
         this.items.add(item)
         notifyDataSetChanged()
     }

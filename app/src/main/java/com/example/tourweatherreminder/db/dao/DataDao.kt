@@ -15,7 +15,7 @@ abstract class DataDao : BaseDao<ScheduleEntity> {
      * Get all data from the Data table.
      */
     @Query("SELECT * FROM Schedule")
-    abstract fun getData(): List<ScheduleEntity>
+    abstract suspend fun getData(): List<ScheduleEntity>
 
     @Query("SELECT * FROM Schedule WHERE id = :id")
     abstract fun selectById(id: Int): Maybe<ScheduleEntity>
@@ -24,13 +24,13 @@ abstract class DataDao : BaseDao<ScheduleEntity> {
     abstract fun selectAll(): Maybe<List<ScheduleEntity>>
 
     @Query("SELECT * FROM Schedule WHERE date = :date")
-    abstract fun selectCountByDate(date : String) : Int
+    abstract fun selectCountByDate(date: String): Int
 
     @Query("DELETE FROM Schedule WHERE date = :date")
-    abstract fun deleteByDate(date : String)
+    abstract fun deleteByDate(date: String)
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insertSchedule(schedule : ScheduleEntity)
+    abstract fun insertSchedule(schedule: ScheduleEntity)
 
 }
