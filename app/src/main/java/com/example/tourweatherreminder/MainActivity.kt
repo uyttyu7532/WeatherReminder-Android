@@ -15,6 +15,7 @@ import com.example.tourweatherreminder.model.ForAsync
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.net.URL
 import java.util.*
@@ -39,10 +40,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         mContext = this.applicationContext
-
         recyclerView = this.findViewById(R.id.recycler_view)
 
-//        resetAdapter()
+        swiperefresh.setOnRefreshListener {
+            swiperefresh.isRefreshing = true // progress bar 돌아가는 작업
+            // 모든 날씨 정보를 다시 받아오는 작업
+            // 비동기에서 작업이 끝날때 swiperefresh.isRefreshing = false해줘야함
+            swiperefresh.isRefreshing = false
+        }
+
 
         // 일정추가 FAB
         addFAB.setOnClickListener {
@@ -105,33 +111,17 @@ class MainActivity : AppCompatActivity() {
             timelineRecyclerAdapter = TimelineRecyclerAdapter()
             recyclerView.adapter = timelineRecyclerAdapter
             recyclerView.layoutManager = LinearLayoutManager(mContext)
-            timelineRecyclerAdapter.addWeatherHeader(cityWeather)
+            timelineRecyclerAdapter.addWeatherHeader(
+                CityWeather(
+                    "Warsaw",
+                    "Sunny", 21.5f, "5%", "56%", "25km/h"
+                )
+            )
             for (i in 0 until ScheduleList.size) {
                 timelineRecyclerAdapter.addTimepoint(Timepoint())
                 timelineRecyclerAdapter.addSchedule(ScheduleList[i])
             }
         }
-
-        // 일정 추가
-        fun addSchedule(
-            weather: String,
-            title: String,
-            date: String,
-            temp: Float,
-            rain: Float,
-            place: String
-        ) {
-            ScheduleList.add(ScheduleEntity(weather, title, date, temp, rain, place))
-            resetAdapter()
-        }
-    }
-
-    companion object FakeData {
-        val cityWeather: CityWeather = CityWeather(
-            "Warsaw",
-            "Sunny", 21.5f, "5%", "56%", "25km/h"
-        )
-
 
     }
 }

@@ -46,6 +46,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.airbnb.android:lottie:3.4.0'
     implementation 'org.jsoup:jsoup:1.13.1'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
 
     def room_version = "2.2.5"
 
@@ -61,7 +62,7 @@ dependencies {
 //    // Test helpers
 //    testImplementation "androidx.room:room-testing:$room_version"
 
-    def coroutineVersion = "1.1.0"
-// coroutine
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
+//    def coroutineVersion = "1.1.0"
+//// coroutine
+//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
 }
