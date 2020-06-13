@@ -29,9 +29,8 @@ lateinit var timelineRecyclerAdapter: TimelineRecyclerAdapter
 lateinit var recyclerView: RecyclerView
 var ScheduleList: ArrayList<ScheduleEntity> = arrayListOf()
 
-var data:List<ScheduleEntity> ?=null
 
-lateinit var mContext:Context
+lateinit var mContext: Context
 
 class MainActivity : AppCompatActivity() {
 
@@ -52,13 +51,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         val appDatabase = AppDatabase
-        CoroutineScope(Dispatchers.IO).launch {
-            ScheduleList.clear()
-            data = appDatabase?.getInstance(applicationContext)?.DataDao()?.getData()
-            Log.d("뭐가 저장되어 있니?", data.toString())
-            data?.forEach { ScheduleList.add(it) }
-            resetAdapter()
-        }
+
+        appDatabase?.getInstance(applicationContext)?.DataDao()?.getData()?.observe(this,
+            androidx.lifecycle.Observer {
+                ScheduleList.clear()
+                Log.d("뭐가 저장되어 있니?", it.toString()) // 전체 저장된 List<ScheduleEntity>
+                it?.forEach {
+                    it.isLastItem = false
+                    ScheduleList.add(it)
+                }
+                resetAdapter()
+            })
 
 
     }
@@ -96,6 +99,9 @@ class MainActivity : AppCompatActivity() {
                 override fun compare(x: ScheduleEntity, y: ScheduleEntity) =
                     x.date.compareTo(y.date)
             })
+            if (ScheduleList.size > 0) {
+                ScheduleList[ScheduleList.size - 1].isLastItem = true
+            }
             timelineRecyclerAdapter = TimelineRecyclerAdapter()
             recyclerView.adapter = timelineRecyclerAdapter
             recyclerView.layoutManager = LinearLayoutManager(mContext)
@@ -108,7 +114,6 @@ class MainActivity : AppCompatActivity() {
 
         // 일정 추가
         fun addSchedule(
-            id: Long,
             weather: String,
             title: String,
             date: String,
@@ -116,7 +121,7 @@ class MainActivity : AppCompatActivity() {
             rain: Float,
             place: String
         ) {
-            ScheduleList.add(ScheduleEntity(10,weather, title, date, temp, rain, place))
+            ScheduleList.add(ScheduleEntity(weather, title, date, temp, rain, place))
             resetAdapter()
         }
     }

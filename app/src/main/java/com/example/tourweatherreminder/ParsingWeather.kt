@@ -6,8 +6,6 @@ import android.util.Log
 import com.example.tourweatherreminder.db.AppDatabase
 import com.example.tourweatherreminder.db.entity.ScheduleEntity
 import com.example.tourweatherreminder.model.ForAsync
-import io.reactivex.Observable
-import io.reactivex.Single
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,21 +50,12 @@ class MainAsyncTask(context: Context) : AsyncTask<ForAsync, Unit, ForAsync>() {
 
     override fun onPostExecute(result: ForAsync) {
         super.onPostExecute(result)
-//        MainActivity.AddSchedule.addSchedule(
-//            leastDiffData!!.icon,
-//            result.title,
-//            result.date,
-//            leastDiffData!!.temp,
-//            leastDiffData!!.rain,
-//            result.place
-//        )
 
         contextRef = WeakReference(mContext)
         val context = contextRef!!.get()
         if (context != null) {
             val appDatabase = AppDatabase
             val scheduleEntity = ScheduleEntity(
-                6,
                 leastDiffData!!.icon,
                 result.title,
                 result.date,
@@ -76,10 +65,8 @@ class MainAsyncTask(context: Context) : AsyncTask<ForAsync, Unit, ForAsync>() {
             )
             CoroutineScope(Dispatchers.IO).launch {
                 appDatabase?.getInstance(context)?.DataDao()?.insertSchedule(scheduleEntity)
+                ScheduleList?.add(scheduleEntity)
             }
-            ScheduleList?.add(scheduleEntity)
-            MainActivity.AddSchedule.resetAdapter()
-
         }
 
 
@@ -165,14 +152,12 @@ class MainAsyncTask(context: Context) : AsyncTask<ForAsync, Unit, ForAsync>() {
 
         var hour = date?.split(":")?.get(0)?.split(" ")?.get(1)
         Log.i("hour파싱", hour)
-        if (hour == "17" || hour == "18" || hour == "19" || hour == "20" || hour == "21") {
-            tempTime = "eve"
-        } else if (hour == "06" || hour == "07" || hour == "08" || hour == "09" || hour == "10" || hour == "11") {
-            tempTime = "morn"
-        } else if (hour == "12" || hour == "13" || hour == "14" || hour == "15" || hour == "16") {
-            tempTime = "day"
-        } else {
-            tempTime = "night"
+
+        when (hour) {
+            "17", "18", "19", "20", "21" -> tempTime = "eve"
+            "06", "07", "08", "09", "10", "11" -> tempTime = "morn"
+            "12", "13", "14", "15", "16" -> tempTime = "day"
+            else -> tempTime = "night"
         }
         Log.i("tempTime파싱", tempTime)
         return tempTime
