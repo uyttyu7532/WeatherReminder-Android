@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.tourweatherreminder.db.dao.DataDao
 import com.example.tourweatherreminder.db.entity.ScheduleEntity
 
-@Database(entities = arrayOf(ScheduleEntity::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(ScheduleEntity::class), version = 1, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun DataDao(): DataDao
 
@@ -21,7 +21,7 @@ abstract class AppDatabase : RoomDatabase() {
                         context.applicationContext,
                         AppDatabase::class.java,
                         "schedule_db.db"
-                    ).build()
+                    ).fallbackToDestructiveMigration().build()
                 }
             }
             return INSTANCE
