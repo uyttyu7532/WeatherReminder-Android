@@ -3,7 +3,11 @@ package com.example.tourweatherreminder
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.util.Log
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -70,8 +74,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         latitude = it.latitude!!
                         longitude = it.longitude!!
                         placeName = it.name!!
-//                        Toast.makeText(this, it.latitude.toString() + " " + it.longitude.toString(), Toast.LENGTH_SHORT).show()
                         var selectedLocation = LatLng(latitude, longitude)
+                        mMap.clear()
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedLocation, 15F))
                         mMap.addMarker(MarkerOptions().position(selectedLocation).title(placeName))
 
@@ -87,17 +91,44 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
+        // 처음에 맵을 켰을 때
         val myLocation = LatLng(latitude, longitude) // 현재 위치
         mMap.addMarker(
             MarkerOptions().position(myLocation).title("선택한 위치")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
                 .snippet("이 위치로 선택하시겠습니까?")
         ).showInfoWindow()
+
+
+        for (i in 0..ScheduleList.size - 1) {
+            Log.i("일정", "${ScheduleList[i].weather}")
+            Log.i("일정", ScheduleList.size.toString())
+            Log.i("일정", "icon${ScheduleList[i].weather?.substring(0, 2)}")
+
+
+
+            // 마커 변경
+//            val markerimg = getResources().getIdentifier("icon${ScheduleList[i].weather?.substring(0, 2)}","drawable",getPackageName())
+
+
+            mMap.addMarker(
+                MarkerOptions().position(
+                    LatLng(
+                        ScheduleList[i].latitude!!,
+                        ScheduleList[i].longitude!!
+                    )
+                ).title("${i + 1}번째 일정")
+//                    .icon(BitmapDescriptorFactory.fromResource(makerimg))
+                    .snippet(ScheduleList[i].place)
+            ).showInfoWindow()
+
+
+        }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 16.0f))
         initMapListener()
     }
 
+    // 클릭했을 때
     fun initMapListener() {
         mMap.setOnMapClickListener {
             mMap.clear()

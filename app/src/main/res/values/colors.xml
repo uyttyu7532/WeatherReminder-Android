@@ -5,23 +5,23 @@
     <color name="colorAccent">#2E2E2E</color>
     <color name="rain">#6991B3</color>
 <!--    해-->
-    <color name="icon01d">#FFCA28</color>
+    <color name="icon01">#FFCA28</color>
 <!--  구름+해  -->
-    <color name="icon02d">#FBDB31</color>
+    <color name="icon02">#FBDB31</color>
 <!--   구름 -->
-    <color name="icon03d">#42A5F5</color>
+    <color name="icon03">#42A5F5</color>
 <!--   먹구름 -->
-    <color name="icon04d">#808080</color>
+    <color name="icon04">#808080</color>
 <!--  소나기  -->
-    <color name="icon09d">#3480BD</color>
+    <color name="icon09">#3480BD</color>
 <!--  비  -->
-    <color name="icon10d">#364B75</color>
+    <color name="icon10">#364B75</color>
 <!--   천둥번개 -->
-    <color name="icon11d">#5F6CB8</color>
+    <color name="icon11">#5F6CB8</color>
 <!--   눈 -->
-    <color name="icon13d">#70D2FA</color>
+    <color name="icon13">#70D2FA</color>
 <!--    안개-->
-    <color name="icon50d">#B6B6B6</color>
+    <color name="icon50">#B6B6B6</color>
     <color name="windowBackground">#232323</color>
     <color name="timelinecolor">#F3EEEE</color>
 </resources>

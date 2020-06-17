@@ -3,68 +3,122 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".AddActivity">
 
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="center">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/timelinecolor"
+        app:cardCornerRadius="30dp"
+        android:elevation="3dp">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_gravity="center"
-        >
+        android:padding="50dp">
 
-        <EditText
+
+        <com.libizo.CustomEditText
             android:id="@+id/editTitleText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:gravity="center"
-            android:hint="내용입력"
-            android:text="타이틀"
-            android:layout_margin="10dp"/>
+            android:hint="일정 이름을 입력해주세요"
+            android:inputType="text"
+            app:libIZO_clearIconTint="#FF0066"
+            app:libIZO_setBorderColor="#7AB800"
+            app:libIZO_setBorderView="true"
+            app:libIZO_setClearIconVisible="true"
+            app:libIZO_setCornerRadius="30dp"
+            app:libIZO_setStrokeWidth="2dp"
+            android:textColorHint="@color/cardview_dark_background"/>
 
-        <Button
+
+        <mehdi.sakout.fancybuttons.FancyButton
             android:id="@+id/addDateBtn"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:text="날짜 및 시간 선택"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
             android:layout_margin="10dp"
-            android:textColor="#000000"
-            />
+            fancy:fb_defaultColor="#7ab800"
+            fancy:fb_focusColor="#9bd823"
+            fancy:fb_iconPosition="left"
+            fancy:fb_radius="30dp"
+            fancy:fb_text="날짜 및 시간 선택하기"
+            fancy:fb_textColor="#FFFFFF"
+            android:layout_gravity="center"/>
+
 
         <TextView
             android:id="@+id/selectedDateText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="2020년 어쩌구"
-            android:textColor="#000000"
+            android:text="선택된 시간이 표시됩니다."
+            android:textColor="@color/cardview_dark_background"
             android:textSize="18sp" />
 
-        <Button
+
+        <mehdi.sakout.fancybuttons.FancyButton
             android:id="@+id/addPlaceBtn"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:text="장소 선택"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
             android:layout_margin="10dp"
-            android:textColor="#000000"/>
+            fancy:fb_defaultColor="#7ab800"
+            fancy:fb_focusColor="#9bd823"
+            fancy:fb_iconPosition="left"
+            fancy:fb_radius="30dp"
+            fancy:fb_text="장소 선택하기"
+            fancy:fb_textColor="#FFFFFF"
+            android:layout_gravity="center"/>
 
         <TextView
             android:id="@+id/selectedPlaceText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="강남역 어쩌구"
+            android:text="선택된 장소가 표시됩니다."
             android:textSize="18sp"
-            android:textColor="#000000"/>
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:text="확인"
-            android:textColor="#000000"/>
+            android:textColor="@color/cardview_dark_background"/>
 
     </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <mehdi.sakout.fancybuttons.FancyButton
+        android:id="@+id/addBtn"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:layout_marginTop="30dp"
+        fancy:fb_defaultColor="#FF2B7F"
+        fancy:fb_focusColor="#F84C4C"
+        fancy:fb_iconPosition="left"
+        fancy:fb_radius="30dp"
+        fancy:fb_text="일정 추가하기"
+        fancy:fb_textColor="#FFFFFF"
+        android:layout_gravity="center"/>
+</LinearLayout>
 </FrameLayout>

@@ -1,2 +1,3 @@
 rootProject.name='TourWeatherReminder'
 include ':app'
+include ':customedittext'

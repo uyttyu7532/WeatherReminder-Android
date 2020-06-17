@@ -5,19 +5,22 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View.inflate
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ColorStateListInflaterCompat.inflate
+import androidx.core.content.res.ComplexColorCompat.inflate
+import androidx.core.graphics.drawable.DrawableCompat.inflate
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tourweatherreminder.MainActivity.AddSchedule.resetAdapter
 import com.example.tourweatherreminder.db.AppDatabase
 import com.example.tourweatherreminder.db.entity.ScheduleEntity
-import com.example.tourweatherreminder.model.ForAsync
+import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.net.URL
 import java.util.*
 
 var dailyWeatherArray = arrayListOf<WeatherData>()
@@ -42,9 +45,22 @@ class MainActivity : AppCompatActivity() {
         mContext = this.applicationContext
         recyclerView = this.findViewById(R.id.recycler_view)
 
+        val bottomAppBar = findViewById(R.id.appBar) as BottomAppBar
+        setSupportActionBar(bottomAppBar)
+
+        init()
+        }
+
+
+    fun init() {
         swiperefresh.setOnRefreshListener {
             swiperefresh.isRefreshing = true // progress bar 돌아가는 작업
             // 모든 날씨 정보를 다시 받아오는 작업
+
+            for (i in ScheduleList) {
+                MainAsyncTask(applicationContext).execute(i)
+            }
+
             // 비동기에서 작업이 끝날때 swiperefresh.isRefreshing = false해줘야함
             swiperefresh.isRefreshing = false
         }
@@ -72,6 +88,22 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.appbarmenu, menu)
+        return true
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.navigation_route->{
+                val intent = Intent(this, RouteActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
     // addActivity에서 돌아온 결과
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -86,11 +118,19 @@ class MainActivity : AppCompatActivity() {
                     var timestamp = data!!.getLongExtra("timestamp", 0)
                     var date = data!!.getStringExtra("date")
 
-                    var url =
-                        URL("https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&&appid=0278d360e035caa40fc3debf63523512&units=metric&exclude=minutely,current")
-                    var forAsync = ForAsync(url, title, date, timestamp, place, latitude, longitude)
+                    var inputScheduleEntity = ScheduleEntity(
+                        null,
+                        title,
+                        date,
+                        timestamp,
+                        null,
+                        null,
+                        latitude,
+                        longitude,
+                        place
+                    )
 
-                    MainAsyncTask(applicationContext).execute(forAsync)
+                    MainAsyncTask(applicationContext).execute(inputScheduleEntity)
                 }
             }
         }

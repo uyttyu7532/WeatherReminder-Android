@@ -42,129 +42,129 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
 
 
             when (item.weather) {
-                "01d" -> { //해
+                "01d","01n" -> { //해
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
-                            R.color.icon01d
+                            R.color.icon01
                         )
                     )
                     weather_icon.setImageDrawable(
                         ContextCompat.getDrawable(
                             context,
-                            R.drawable.icon01d
+                            R.drawable.icon01
                         )
                     )
                 }
-                "02d" -> { //구름+해
+                "02d","02n" -> { //구름+해
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
-                            R.color.icon02d
+                            R.color.icon02
                         )
                     )
                     weather_icon.setImageDrawable(
                         ContextCompat.getDrawable(
                             context,
-                            R.drawable.icon02d
+                            R.drawable.icon02
                         )
                     )
                 }
-                "03d" -> { //구름
+                "03d","03n" -> { //구름
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
-                            R.color.icon03d
+                            R.color.icon03
                         )
                     )
                     weather_icon.setImageDrawable(
                         ContextCompat.getDrawable(
                             context,
-                            R.drawable.icon03d
+                            R.drawable.icon03
                         )
                     )
                 }
-                "04d" -> { // 먹구름
+                "04d","04n" -> { // 먹구름
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
-                            R.color.icon04d
+                            R.color.icon04
                         )
                     )
                     weather_icon.setImageDrawable(
                         ContextCompat.getDrawable(
                             context,
-                            R.drawable.icon04d
+                            R.drawable.icon04
                         )
                     )
                 }
-                "09d" -> { //  소나기
+                "09d","09n" -> { //  소나기
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
-                            R.color.icon09d
+                            R.color.icon09
                         )
                     )
                     weather_icon.setImageDrawable(
                         ContextCompat.getDrawable(
                             context,
-                            R.drawable.icon09d
+                            R.drawable.icon09
                         )
                     )
                 }
-                "10d" -> { // 비
+                "10d","10n" -> { // 비
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
-                            R.color.icon10d
+                            R.color.icon10
                         )
                     )
                     weather_icon.setImageDrawable(
                         ContextCompat.getDrawable(
                             context,
-                            R.drawable.icon10d
+                            R.drawable.icon10
                         )
                     )
                 }
-                "11d" -> { // 천둥번개
+                "11d","11n" -> { // 천둥번개
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
-                            R.color.icon11d
+                            R.color.icon11
                         )
                     )
                     weather_icon.setImageDrawable(
                         ContextCompat.getDrawable(
                             context,
-                            R.drawable.icon11d
+                            R.drawable.icon11
                         )
                     )
                 }
-                "13d" -> { //눈
+                "13d","13n" -> { //눈
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
-                            R.color.icon13d
+                            R.color.icon13
                         )
                     )
                     weather_icon.setImageDrawable(
                         ContextCompat.getDrawable(
                             context,
-                            R.drawable.icon13d
+                            R.drawable.icon13
                         )
                     )
                 }
-                "50d" -> { // 안개
+                "50d","50n" -> { // 안개
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
-                            R.color.icon50d
+                            R.color.icon50
                         )
                     )
                     weather_icon.setImageDrawable(
                         ContextCompat.getDrawable(
                             context,
-                            R.drawable.icon50d
+                            R.drawable.icon50
                         )
                     )
                 }

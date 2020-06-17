@@ -5,7 +5,6 @@ import android.os.AsyncTask
 import android.util.Log
 import com.example.tourweatherreminder.db.AppDatabase
 import com.example.tourweatherreminder.db.entity.ScheduleEntity
-import com.example.tourweatherreminder.model.ForAsync
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,38 +16,38 @@ import java.util.*
 
 
 // 비동기
-class MainAsyncTask(context: Context) : AsyncTask<ForAsync, Unit, ForAsync>() {
+class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, ScheduleEntity>() {
 
     private var contextRef: WeakReference<Context>? = null
     val mContext = context
 
-    override fun doInBackground(vararg params: ForAsync): ForAsync? {
+    override fun doInBackground(vararg params: ScheduleEntity): ScheduleEntity? {
 
-        Log.i("위도파싱", params[0].latitude.toString())
-        Log.i("경도파싱", params[0].longitude.toString())
+            var url =
+                URL("https://api.openweathermap.org/data/2.5/onecall?lat=${params[0].latitude}&lon=${params[0].longitude}&&appid=0278d360e035caa40fc3debf63523512&units=metric&exclude=minutely,current")
+            val doc = Jsoup.connect(url.toString()).ignoreContentType(true).get()
+            val json = JSONObject(doc.text())
 
-        val doc = Jsoup.connect(params[0].url.toString()).ignoreContentType(true).get()
-        val json = JSONObject(doc.text())
+            timeStamp = params[0].timestamp / 1000 - getGMTOffset(json)
+            Log.i("now파싱", now.toString())
+            Log.i("timeStamp파싱", timeStamp.toString())
+            var timeDiff = Math.abs(now - timeStamp!!)
+            Log.i("timeDiff파싱", timeDiff.toString())
+            isHourly = timeDiff < 2 * 86400 // 2일(초)
 
-        timeStamp = params[0].timestamp / 1000 - getGMTOffset(json)
-        Log.i("now파싱", now.toString())
-        Log.i("timeStamp파싱", timeStamp.toString())
-        var timeDiff = Math.abs(now - timeStamp!!)
-        Log.i("timeDiff파싱", timeDiff.toString())
-        isHourly = timeDiff < 2 * 86400 // 2일(초)
+            if (isHourly) {
+                parseHourly(json)
+                findMinDiffDt(hourlyWeatherArray)
+            } else {
+                parseDaily(json, tempTime(params[0].date))
+                findMinDiffDt(dailyWeatherArray)
+            }
 
-        if (isHourly) {
-            parseHourly(json)
-            findMinDiffDt(hourlyWeatherArray)
-        } else {
-            parseDaily(json, tempTime(params[0].date))
-            findMinDiffDt(dailyWeatherArray)
-        }
         return params[0]
 
     }
 
-    override fun onPostExecute(result: ForAsync) {
+    override fun onPostExecute(result: ScheduleEntity) {
         super.onPostExecute(result)
 
         contextRef = WeakReference(mContext)
@@ -59,8 +58,11 @@ class MainAsyncTask(context: Context) : AsyncTask<ForAsync, Unit, ForAsync>() {
                 leastDiffData!!.icon,
                 result.title,
                 result.date,
+                result.timestamp,
                 leastDiffData!!.temp,
                 leastDiffData!!.rain,
+                result.latitude,
+                result.longitude,
                 result.place
             )
             CoroutineScope(Dispatchers.IO).launch {
@@ -68,9 +70,8 @@ class MainAsyncTask(context: Context) : AsyncTask<ForAsync, Unit, ForAsync>() {
                 ScheduleList?.add(scheduleEntity)
             }
         }
-
-
     }
+
 
     fun findMinDiffDt(WeatherArray: ArrayList<WeatherData>): WeatherData {
         var diff: Long = Math.abs(WeatherArray[0].dt - timeStamp!!)

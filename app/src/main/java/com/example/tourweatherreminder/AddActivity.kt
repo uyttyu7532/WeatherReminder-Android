@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.jzxiang.pickerview.TimePickerDialog
 import com.jzxiang.pickerview.data.Type
 import com.jzxiang.pickerview.listener.OnDateSetListener
+import com.libizo.CustomEditText
 import kotlinx.android.synthetic.main.activity_add.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -24,7 +25,7 @@ class AddActivity : AppCompatActivity(),
 
     var mDialogAll: TimePickerDialog? = null
     var selectedDateText: TextView? = null
-    var editTitleText: EditText? = null
+    var editTitleText: CustomEditText? = null
     var selectedPlaceText:TextView?=null
     var sf = SimpleDateFormat("yyyy-MM-dd HH:mm")
 
@@ -53,10 +54,10 @@ class AddActivity : AppCompatActivity(),
             .setMinMillseconds(System.currentTimeMillis())
             .setMaxMillseconds(System.currentTimeMillis() + sevenDays)
             .setCurrentMillseconds(System.currentTimeMillis())
-            .setThemeColor(resources.getColor(R.color.timepicker_dialog_bg))
+            .setThemeColor(R.color.timepicker_dialog_bg)
             .setType(Type.ALL)
-            .setWheelItemTextNormalColor(resources.getColor(R.color.timetimepicker_default_text_color))
-            .setWheelItemTextSelectorColor(resources.getColor(R.color.timepicker_toolbar_bg))
+            .setWheelItemTextNormalColor(R.color.timetimepicker_default_text_color)
+            .setWheelItemTextSelectorColor(R.color.timepicker_toolbar_bg)
             .setWheelItemTextSize(12)
             .build()
     }
@@ -64,7 +65,7 @@ class AddActivity : AppCompatActivity(),
     fun initView() {
         selectedDateText = findViewById<View>(R.id.selectedDateText) as TextView
         selectedPlaceText = findViewById<View>(R.id.selectedPlaceText) as TextView
-        editTitleText = findViewById<View>(R.id.editTitleText) as EditText
+        editTitleText = findViewById<View>(R.id.editTitleText) as CustomEditText
 
         // 날짜 및 시간 선택 버튼
         addDateBtn.setOnClickListener {
@@ -78,7 +79,7 @@ class AddActivity : AppCompatActivity(),
         }
 
         // 확인 버튼
-        button.setOnClickListener {
+        addBtn.setOnClickListener {
             val intent = Intent()
             var title=editTitleText?.text.toString()
             intent.putExtra("title", title)
