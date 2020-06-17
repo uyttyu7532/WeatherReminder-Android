@@ -6,14 +6,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View.inflate
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ColorStateListInflaterCompat.inflate
-import androidx.core.content.res.ComplexColorCompat.inflate
-import androidx.core.graphics.drawable.DrawableCompat.inflate
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tourweatherreminder.MainActivity.AddSchedule.resetAdapter

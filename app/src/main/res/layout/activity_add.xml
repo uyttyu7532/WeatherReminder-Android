@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@android:style/Theme.Translucent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -35,8 +36,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:gravity="center"
-            android:hint="일정 이름을 입력해주세요"
+            android:hint="일정 이름을 입력해주세요."
             android:inputType="text"
+            android:maxEms="10"
             app:libIZO_clearIconTint="#FF0066"
             app:libIZO_setBorderColor="#7AB800"
             app:libIZO_setBorderView="true"

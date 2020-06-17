@@ -2,11 +2,16 @@ package com.example.tourweatherreminder
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import cn.pedant.SweetAlert.SweetAlertDialog
+import com.example.tourweatherreminder.MainActivity.AddSchedule.resetAdapter
+import com.example.tourweatherreminder.db.AppDatabase
 import com.example.tourweatherreminder.db.entity.ScheduleEntity
 import kotlinx.android.synthetic.main.item_weather.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import pl.hypeapp.materialtimelineview.MaterialTimelineView
 
 
@@ -33,16 +38,43 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
             title.text = item.title
             date.text = item.date
             temperature_degree.text = "${item.temp}\u00b0"
-            rain_percentage.text = item.rain.toString()+"mm / h"
+            rain_percentage.text = item.rain.toString() + "mm / h"
             place.text = item.place
 
             itemView.setOnClickListener {
-                Toast.makeText(it.context, adapterPosition.toString(), Toast.LENGTH_SHORT).show()
+                //팝업창띄워서 yes한다면 밑에 코드 실행
+
+//                resetAdapter()
+//
+//                val appDatabase = AppDatabase
+//                CoroutineScope(Dispatchers.IO).launch {
+//                    appDatabase?.getInstance(context)?.DataDao()?.deleteSchedule(item)
+//                    ScheduleList.remove(item)
+//                }
+                SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("정말로 지우시겠습니까??")
+                    .setContentText("You won't be able to recover this file!")
+                    .setConfirmText("Delete!")
+                    .setConfirmClickListener { sDialog ->
+                        resetAdapter()
+
+                        val appDatabase = AppDatabase
+                        CoroutineScope(Dispatchers.IO).launch {
+                            appDatabase?.getInstance(context)?.DataDao()?.deleteSchedule(item)
+                            ScheduleList.remove(item)
+                        }
+                        sDialog.dismissWithAnimation() }
+                    .setCancelButton(
+                        "Cancel"
+                    ) { sDialog -> sDialog.dismissWithAnimation() }
+                    .show()
             }
 
 
+
+
             when (item.weather) {
-                "01d","01n" -> { //해
+                "01d", "01n" -> { //해
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
@@ -56,7 +88,7 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
                         )
                     )
                 }
-                "02d","02n" -> { //구름+해
+                "02d", "02n" -> { //구름+해
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
@@ -70,7 +102,7 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
                         )
                     )
                 }
-                "03d","03n" -> { //구름
+                "03d", "03n" -> { //구름
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
@@ -84,7 +116,7 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
                         )
                     )
                 }
-                "04d","04n" -> { // 먹구름
+                "04d", "04n" -> { // 먹구름
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
@@ -98,7 +130,7 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
                         )
                     )
                 }
-                "09d","09n" -> { //  소나기
+                "09d", "09n" -> { //  소나기
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
@@ -112,7 +144,7 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
                         )
                     )
                 }
-                "10d","10n" -> { // 비
+                "10d", "10n" -> { // 비
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
@@ -126,7 +158,7 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
                         )
                     )
                 }
-                "11d","11n" -> { // 천둥번개
+                "11d", "11n" -> { // 천둥번개
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
@@ -140,7 +172,7 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
                         )
                     )
                 }
-                "13d","13n" -> { //눈
+                "13d", "13n" -> { //눈
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
@@ -154,7 +186,7 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
                         )
                     )
                 }
-                "50d","50n" -> { // 안개
+                "50d", "50n" -> { // 안개
                     item_weather_timeline.setBackgroundColor(
                         ContextCompat.getColor(
                             context,

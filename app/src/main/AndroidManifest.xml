@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RouteActivity"></activity>
+        <activity android:name=".RouteActivity"/>
         <activity android:name=".SplashActivity" />
 
         <meta-data
@@ -28,7 +28,7 @@
             android:label="@string/title_activity_maps" />
         <activity android:name=".SearchPlaceActivity" />
         <activity android:name=".AddActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

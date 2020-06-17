@@ -37,7 +37,7 @@
         android:id="@+id/okBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
+        android:layout_gravity="bottom|end"
         android:layout_margin="15dp"
         android:src="@drawable/ic_done_black_24dp"
         map:backgroundTint="#FFFFFF" />

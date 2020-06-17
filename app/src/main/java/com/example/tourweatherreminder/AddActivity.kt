@@ -18,15 +18,15 @@ import java.util.*
 class AddActivity : AppCompatActivity(),
     OnDateSetListener {
 
-    var latitude: Double?=null
-    var longitude:Double?=null
-    var timestamp:Long?=null
-    var date:String?=null
+    var latitude: Double? = null
+    var longitude: Double? = null
+    var timestamp: Long? = null
+    var date: String? = null
 
     var mDialogAll: TimePickerDialog? = null
     var selectedDateText: TextView? = null
     var editTitleText: CustomEditText? = null
-    var selectedPlaceText:TextView?=null
+    var selectedPlaceText: TextView? = null
     var sf = SimpleDateFormat("yyyy-MM-dd HH:mm")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +36,6 @@ class AddActivity : AppCompatActivity(),
         createDatePickerDialog()
 
     }
-
 
     fun createDatePickerDialog() {
         val sevenDays = 7 * 1000 * 60 * 60 * 24L
@@ -81,13 +80,13 @@ class AddActivity : AppCompatActivity(),
         // 확인 버튼
         addBtn.setOnClickListener {
             val intent = Intent()
-            var title=editTitleText?.text.toString()
+            var title = editTitleText?.text.toString()
             intent.putExtra("title", title)
             intent.putExtra("timestamp", timestamp)
             intent.putExtra("latitude", latitude)
             intent.putExtra("longitude", longitude)
-            intent.putExtra("placeName",selectedPlaceText?.text.toString())
-            intent.putExtra("date",selectedDateText?.text.toString())
+            intent.putExtra("placeName", selectedPlaceText?.text.toString())
+            intent.putExtra("date", selectedDateText?.text.toString())
 
             setResult(Activity.RESULT_OK, intent)
             finish()
@@ -100,10 +99,10 @@ class AddActivity : AppCompatActivity(),
             when (requestCode) {
                 100 -> {
                     selectedPlaceText?.text = data!!.getStringExtra("placeName").toString()
-                    latitude = data.getDoubleExtra("latitude",0.0)
-                    longitude = data.getDoubleExtra("longitude",0.0)
-                    timestamp = data.getLongExtra("timestamp",0)
-                    date=data.getStringExtra("date")
+                    latitude = data.getDoubleExtra("latitude", 0.0)
+                    longitude = data.getDoubleExtra("longitude", 0.0)
+                    timestamp = data.getLongExtra("timestamp", 0)
+                    date = data.getStringExtra("date")
                 }
             }
         }
@@ -115,7 +114,7 @@ class AddActivity : AppCompatActivity(),
         millseconds: Long
     ) {
         val dateToString = getDateToString(millseconds)
-        date=dateToString
+        date = dateToString
         selectedDateText!!.text = dateToString
         timestamp = millseconds
     }
@@ -124,6 +123,4 @@ class AddActivity : AppCompatActivity(),
         val d = Date(time)
         return sf.format(d)
     }
-
-
 }

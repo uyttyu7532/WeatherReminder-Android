@@ -26,6 +26,9 @@ abstract class DataDao : BaseDao<ScheduleEntity> {
 //    @Query("DELETE FROM Schedule WHERE date = :date")
 //    abstract fun deleteByDate(date: String)
 
+    @Delete
+    abstract fun deleteSchedule(schedule: ScheduleEntity)
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertSchedule(schedule: ScheduleEntity)

@@ -68,5 +68,6 @@ dependencies {
 
     implementation 'com.libizo:customedittext:1.0.6'
     implementation 'com.github.medyo:fancybuttons:1.9.1'
+    implementation 'com.github.f0ris.sweetalert:library:1.5.6'
 
 }

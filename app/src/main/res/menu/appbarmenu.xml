@@ -3,7 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_route"
-        android:icon="@drawable/icon02"
+        android:icon="@drawable/route"
         android:title="ShowRoute"
         app:showAsAction="always" />
+<!--    <item-->
+<!--        android:id="@+id/navigation_option"-->
+<!--        android:icon="@drawable/ic_baseline_more_vert_24"-->
+<!--        android:title="ShowOption"-->
+<!--        app:showAsAction="never" />-->
 </menu>
