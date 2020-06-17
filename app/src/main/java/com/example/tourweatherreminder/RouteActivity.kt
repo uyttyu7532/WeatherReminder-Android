@@ -1,5 +1,6 @@
 package com.example.tourweatherreminder
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,8 +12,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-
 
 
 class RouteActivity : AppCompatActivity() {
@@ -50,7 +51,6 @@ class RouteActivity : AppCompatActivity() {
                         ), 16.0f
                     )
                 )
-
             }
 
         }
@@ -80,8 +80,16 @@ class RouteActivity : AppCompatActivity() {
         mapFragment.getMapAsync {
             googleMap = it
 
+            var lineOptions = PolylineOptions()
+
             for (i in 0..ScheduleList.size - 1) {
 
+                lineOptions!!.add(
+                    LatLng(
+                        ScheduleList[i].latitude!!,
+                        ScheduleList[i].longitude!!
+                    )
+                )
 
                 // 마커 변경
                 val markerimg = getResources().getIdentifier(
@@ -90,7 +98,6 @@ class RouteActivity : AppCompatActivity() {
                     getPackageName()
                 )
 
-
                 googleMap.addMarker(
                     MarkerOptions().position(
                         LatLng(
@@ -98,12 +105,14 @@ class RouteActivity : AppCompatActivity() {
                             ScheduleList[i].longitude!!
                         )
                     ).title("${i + 1}번째 일정")
-                        .icon(BitmapDescriptorFactory.fromResource(markerimg))
+//                        .icon(BitmapDescriptorFactory.fromResource(markerimg))
                         .snippet(ScheduleList[i].place)
                 ).showInfoWindow()
 
 
             }
+
+            googleMap.addPolyline(lineOptions)
             googleMap.moveCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     LatLng(

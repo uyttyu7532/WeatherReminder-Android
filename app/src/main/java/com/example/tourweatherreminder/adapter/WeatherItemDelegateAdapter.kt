@@ -42,19 +42,11 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
             place.text = item.place
 
             itemView.setOnClickListener {
-                //팝업창띄워서 yes한다면 밑에 코드 실행
 
-//                resetAdapter()
-//
-//                val appDatabase = AppDatabase
-//                CoroutineScope(Dispatchers.IO).launch {
-//                    appDatabase?.getInstance(context)?.DataDao()?.deleteSchedule(item)
-//                    ScheduleList.remove(item)
-//                }
                 SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("정말로 지우시겠습니까??")
-                    .setContentText("You won't be able to recover this file!")
-                    .setConfirmText("Delete!")
+                    .setContentText("지우면 복구할 수 없습니다!")
+                    .setConfirmText("삭제!")
                     .setConfirmClickListener { sDialog ->
                         resetAdapter()
 
@@ -65,7 +57,7 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
                         }
                         sDialog.dismissWithAnimation() }
                     .setCancelButton(
-                        "Cancel"
+                        "취소"
                     ) { sDialog -> sDialog.dismissWithAnimation() }
                     .show()
             }
