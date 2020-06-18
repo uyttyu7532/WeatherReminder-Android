@@ -6,9 +6,10 @@
         android:icon="@drawable/route"
         android:title="ShowRoute"
         app:showAsAction="always" />
-<!--    <item-->
-<!--        android:id="@+id/navigation_option"-->
-<!--        android:icon="@drawable/ic_baseline_more_vert_24"-->
-<!--        android:title="ShowOption"-->
-<!--        app:showAsAction="never" />-->
+    <item
+        android:id="@+id/developer_info"
+        android:icon="@drawable/ic_baseline_person_24"
+        android:title="developerInfo"
+        app:showAsAction="always" />
+
 </menu>

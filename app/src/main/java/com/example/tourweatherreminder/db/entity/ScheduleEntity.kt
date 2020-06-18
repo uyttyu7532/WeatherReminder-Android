@@ -16,6 +16,7 @@ data class ScheduleEntity(
     var latitude:Double?,
     var longitude:Double?,
     var place: String,
+    var isFirstItem: Boolean = false,
     var isLastItem: Boolean = false
 ) : ViewType {
 

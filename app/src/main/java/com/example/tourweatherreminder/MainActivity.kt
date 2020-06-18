@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -94,7 +95,7 @@ class MainActivity : AppCompatActivity() {
                 ScheduleList.clear()
                 Log.d("뭐가 저장되어 있니?", it.toString()) // 전체 저장된 List<ScheduleEntity>
                 it?.forEach {
-                    it.isLastItem = false
+//                    it.isLastItem = false
                     ScheduleList.add(it)
                 }
                 resetAdapter()
@@ -114,6 +115,9 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_route -> {
                 val intent = Intent(this, RouteActivity::class.java)
                 startActivity(intent)
+            }
+            R.id.developer_info -> {
+                Toast.makeText(this, "스마트ict융합공학과 201714286 조예린", Toast.LENGTH_SHORT).show()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -173,23 +177,28 @@ class MainActivity : AppCompatActivity() {
                     x.date.compareTo(y.date)
             })
             if (ScheduleList.size > 0) {
-//                ScheduleList[0].isFirstItem = true
+                ScheduleList[0].isFirstItem = true
                 ScheduleList[ScheduleList.size - 1].isLastItem = true
             }
             timelineRecyclerAdapter = TimelineRecyclerAdapter()
             recyclerView.adapter = timelineRecyclerAdapter
             recyclerView.layoutManager = LinearLayoutManager(mContext)
-            timelineRecyclerAdapter.addWeatherHeader(
-                CityWeather(
-                    "Warsaw",
-                    "Sunny", 21.5f, "5%", "56%", "25km/h"
-                )
-            )
+//            timelineRecyclerAdapter.addWeatherHeader(
+//                CityWeather(
+//                    "Warsaw",
+//                    "Sunny", 21.5f, "5%", "56%", "25km/h"
+//                )
+//            )
             for (i in 0 until ScheduleList.size) {
-                timelineRecyclerAdapter.addTimepoint(Timepoint())
-                timelineRecyclerAdapter.addSchedule(ScheduleList[i])
+                if(!ScheduleList[i].isFirstItem) {
+                    timelineRecyclerAdapter.addTimepoint(Timepoint())
+                }
+                timelineRecyclerAdapter.addSchedule(ScheduleList[i], ScheduleList[i].isFirstItem)
             }
+            Log.i("전체 list",ScheduleList.toString())
+            Log.i("전체 list",ScheduleList.size.toString())
         }
+
 
     }
 }

@@ -40,9 +40,9 @@ class TimelineRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
         notifyDataSetChanged()
     }
 
-    fun addSchedule(item: ScheduleEntity) {
-        this.items.add(item)
-        notifyDataSetChanged()
+    fun addSchedule(item: ScheduleEntity,isFirst:Boolean) {
+            this.items.add(item)
+            notifyDataSetChanged()
     }
 
     fun addTimepoint(item: Timepoint) {

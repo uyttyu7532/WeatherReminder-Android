@@ -10,16 +10,16 @@
 
 
 
-    <pl.hypeapp.materialtimelineview.MaterialTimelineView
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:background="@color/windowBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:timeline_margin_start="32dp"
-        app:timeline_position="first"
-        app:timeline_type="item"
-        app:timeline_bottom_radio_color="@color/timelinecolor">
-    </pl.hypeapp.materialtimelineview.MaterialTimelineView>
+<!--    <pl.hypeapp.materialtimelineview.MaterialTimelineView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:background="@color/windowBackground"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintEnd_toStartOf="parent"-->
+<!--        app:timeline_margin_start="32dp"-->
+<!--        app:timeline_position="first"-->
+<!--        app:timeline_type="item"-->
+<!--        app:timeline_bottom_radio_color="@color/timelinecolor">-->
+<!--    </pl.hypeapp.materialtimelineview.MaterialTimelineView>-->
 
 </androidx.cardview.widget.CardView>
