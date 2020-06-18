@@ -1,15 +1,10 @@
 package com.example.tourweatherreminder
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -90,6 +85,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     // OnMapReadyCallback - 맵이 사용할 준비가 다 됐어~
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        
 
         // 처음에 맵을 켰을 때
         val myLocation = LatLng(latitude, longitude) // 현재 위치
@@ -103,7 +99,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         for (i in 0..ScheduleList.size - 1) {
             Log.i("일정", "${ScheduleList[i].weather}")
             Log.i("일정", ScheduleList.size.toString())
-            Log.i("일정", "icon${ScheduleList[i].weather?.substring(0, 2)}")
 
 
 
@@ -140,6 +135,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .snippet("이 위치로 선택하시겠습니까?")
             ).showInfoWindow()
         }
+
+
+
+
     }
 
 

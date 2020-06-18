@@ -48,6 +48,8 @@ class MainActivity : AppCompatActivity() {
         val bottomAppBar = findViewById(R.id.appBar) as BottomAppBar
         setSupportActionBar(bottomAppBar)
 
+        updateAllSchedule()
+
         init()
     }
 
@@ -59,7 +61,15 @@ class MainActivity : AppCompatActivity() {
 
     fun init() {
 
-        updateAllSchedule()
+//        val current = LocalDateTime.now()
+//        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+//        val formatted = current.format(formatter)
+//        updatetime.setText(formatted)
+
+
+        refreshBtn.setOnClickListener {
+            updateAllSchedule()
+        }
 
         swiperefresh.setOnRefreshListener {
             swiperefresh.isRefreshing = true // progress bar 돌아가는 작업
@@ -149,8 +159,8 @@ class MainActivity : AppCompatActivity() {
         // 모든 날씨 정보를 다시 받아오는 작업
         for (i in ScheduleList) {
             MainAsyncTask(applicationContext).execute(i)
-            updatetime.setText(formatted)
         }
+        updatetime.setText(formatted)
     }
 
 

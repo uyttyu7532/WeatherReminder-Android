@@ -44,6 +44,7 @@ class RouteActivity : AppCompatActivity() {
                 currentSchedule--
                 Toast.makeText(this, currentSchedule.toString(), Toast.LENGTH_SHORT).show()
                 googleMap.animateCamera(
+
                     CameraUpdateFactory.newLatLngZoom(
                         LatLng(
                             ScheduleList[currentSchedule].latitude!!,
@@ -80,6 +81,7 @@ class RouteActivity : AppCompatActivity() {
         mapFragment.getMapAsync {
             googleMap = it
 
+
             var lineOptions = PolylineOptions()
 
             for (i in 0..ScheduleList.size - 1) {
@@ -98,18 +100,23 @@ class RouteActivity : AppCompatActivity() {
                     getPackageName()
                 )
 
-                googleMap.addMarker(
-                    MarkerOptions().position(
+
+                var markeroptions = MarkerOptions()
+                markeroptions
+                    .position(
                         LatLng(
                             ScheduleList[i].latitude!!,
                             ScheduleList[i].longitude!!
                         )
-                    ).title("${i + 1}번째 일정")
+                    )
+                    .title("${i + 1}번째 일정")
 //                        .icon(BitmapDescriptorFactory.fromResource(markerimg))
-                        .snippet(ScheduleList[i].place)
-                ).showInfoWindow()
+                    .snippet(ScheduleList[i].weather+"\t"+ScheduleList[i].rain+"\t"+ScheduleList[i].title+"\t"+ScheduleList[i].date)
 
+                val adapter = InfoWindowAdapter(this)
+                googleMap.setInfoWindowAdapter(adapter)
 
+                googleMap.addMarker(markeroptions).showInfoWindow()
             }
 
             googleMap.addPolyline(lineOptions)
