@@ -21,15 +21,16 @@ class TimelineRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
 
     override fun getItemCount(): Int = items.size
 
-    fun clear(){
-        items.clear()
-    }
+//    fun clear(){
+//        items.clear()
+//    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return delegateAdapters.get(viewType)!!.onCreateViewHolder(parent)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         delegateAdapters.get(getItemViewType(position))!!.onBindViewHolder(holder, items[position])
+
     }
 
     override fun getItemViewType(position: Int) = items[position].getViewType()

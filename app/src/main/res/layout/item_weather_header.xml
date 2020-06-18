@@ -2,27 +2,24 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@android:color/transparent"
     app:cardCornerRadius="5dp"
     app:cardElevation="0dp">
 
+
+
     <pl.hypeapp.materialtimelineview.MaterialTimelineView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#2E2E2E"
-        android:padding="16dp"
+        android:layout_height="5dp"
+        android:background="@color/windowBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:timeline_margin_start="32dp"
         app:timeline_position="first"
         app:timeline_type="item"
         app:timeline_bottom_radio_color="@color/timelinecolor">
-
-
-
     </pl.hypeapp.materialtimelineview.MaterialTimelineView>
 
 </androidx.cardview.widget.CardView>

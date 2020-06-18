@@ -173,6 +173,7 @@ class MainActivity : AppCompatActivity() {
                     x.date.compareTo(y.date)
             })
             if (ScheduleList.size > 0) {
+//                ScheduleList[0].isFirstItem = true
                 ScheduleList[ScheduleList.size - 1].isLastItem = true
             }
             timelineRecyclerAdapter = TimelineRecyclerAdapter()

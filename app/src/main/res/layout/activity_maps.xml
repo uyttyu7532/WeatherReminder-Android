@@ -20,7 +20,7 @@
         fancy:fb_defaultColor="#7ab800"
         fancy:fb_focusColor="#9bd823"
         fancy:fb_iconPosition="left"
-        fancy:fb_radius="30dp"
+        fancy:fb_radius="5dp"
         fancy:fb_text="장소 검색하기"
         fancy:fb_textColor="#FFFFFF"
         android:gravity="center"/>

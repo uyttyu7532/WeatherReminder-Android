@@ -32,6 +32,9 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
 
 
         fun bind(item: ScheduleEntity) = with(itemView) {
+//            if(item.isFirstItem){
+//                item_weather_timeline.position = MaterialTimelineView.POSITION_FIRST
+//            }
             if (item.isLastItem) {
                 item_weather_timeline.position = MaterialTimelineView.POSITION_LAST
             }

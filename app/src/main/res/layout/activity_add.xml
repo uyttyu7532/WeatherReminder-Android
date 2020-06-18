@@ -20,7 +20,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:backgroundTint="@color/timelinecolor"
-        app:cardCornerRadius="30dp"
+        app:cardCornerRadius="5dp"
         android:elevation="3dp">
 
     <LinearLayout
@@ -43,7 +43,7 @@
             app:libIZO_setBorderColor="#7AB800"
             app:libIZO_setBorderView="true"
             app:libIZO_setClearIconVisible="true"
-            app:libIZO_setCornerRadius="30dp"
+            app:libIZO_setCornerRadius="5dp"
             app:libIZO_setStrokeWidth="2dp"
             android:textColorHint="@color/cardview_dark_background"/>
 
@@ -60,7 +60,7 @@
             fancy:fb_defaultColor="#7ab800"
             fancy:fb_focusColor="#9bd823"
             fancy:fb_iconPosition="left"
-            fancy:fb_radius="30dp"
+            fancy:fb_radius="5dp"
             fancy:fb_text="날짜 및 시간 선택하기"
             fancy:fb_textColor="#FFFFFF"
             android:layout_gravity="center"/>
@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="선택된 시간이 표시됩니다."
-            android:textColor="@color/cardview_dark_background"
+            android:textColor="@color/windowBackground"
             android:textSize="18sp" />
 
 
@@ -88,7 +88,7 @@
             fancy:fb_defaultColor="#7ab800"
             fancy:fb_focusColor="#9bd823"
             fancy:fb_iconPosition="left"
-            fancy:fb_radius="30dp"
+            fancy:fb_radius="5dp"
             fancy:fb_text="장소 선택하기"
             fancy:fb_textColor="#FFFFFF"
             android:layout_gravity="center"/>
@@ -100,7 +100,7 @@
             android:gravity="center"
             android:text="선택된 장소가 표시됩니다."
             android:textSize="18sp"
-            android:textColor="@color/cardview_dark_background"/>
+            android:textColor="@color/windowBackground"/>
 
     </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -115,12 +115,12 @@
         android:paddingRight="20dp"
         android:paddingTop="10dp"
         android:layout_marginTop="30dp"
-        fancy:fb_defaultColor="#FF2B7F"
+        fancy:fb_defaultColor="@color/timelinecolor"
         fancy:fb_focusColor="#F84C4C"
         fancy:fb_iconPosition="left"
-        fancy:fb_radius="30dp"
+        fancy:fb_radius="5dp"
         fancy:fb_text="일정 추가하기"
-        fancy:fb_textColor="#FFFFFF"
+        fancy:fb_textColor="@color/windowBackground"
         android:layout_gravity="center"/>
 </LinearLayout>
 </FrameLayout>
