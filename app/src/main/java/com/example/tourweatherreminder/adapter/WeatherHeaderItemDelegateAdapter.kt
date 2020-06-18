@@ -19,12 +19,12 @@ class WeatherHeaderItemDelegateAdapter : ViewTypeDelegateAdapter {
             LayoutInflater.from(parent.context).inflate(R.layout.item_weather_header, parent, false)) {
 
         fun bind(item: CityWeather) = with(itemView) {
-            city.text = item.city
-            weather_description.text = item.weatherDescription
-            temperature_degree.text = "${item.temperature}\u00b0"
-            rain_percentage.text = item.rainPercentage
-            cloud_percentage.text = item.cloudyPercentage
-            wind_speed.text = item.windSpeed
+//            city.text = item.city
+//            weather_description.text = item.weatherDescription
+//            temperature_degree.text = "${item.temperature}\u00b0"
+//            rain_percentage.text = item.rainPercentage
+//            cloud_percentage.text = item.cloudyPercentage
+//            wind_speed.text = item.windSpeed
         }
 
     }

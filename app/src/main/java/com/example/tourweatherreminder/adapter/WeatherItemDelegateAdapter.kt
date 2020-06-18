@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import cn.pedant.SweetAlert.SweetAlertDialog
-import com.example.tourweatherreminder.MainActivity.AddSchedule.resetAdapter
+import com.example.tourweatherreminder.MainActivity.resetSchedule.resetAdapter
 import com.example.tourweatherreminder.db.AppDatabase
 import com.example.tourweatherreminder.db.entity.ScheduleEntity
 import kotlinx.android.synthetic.main.item_weather.view.*

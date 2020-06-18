@@ -7,14 +7,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tourweatherreminder.MainActivity.AddSchedule.resetAdapter
+import com.example.tourweatherreminder.MainActivity.resetSchedule.resetAdapter
 import com.example.tourweatherreminder.db.AppDatabase
 import com.example.tourweatherreminder.db.entity.ScheduleEntity
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.activity_main.*
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 var dailyWeatherArray = arrayListOf<WeatherData>()
@@ -23,8 +26,10 @@ var leastDiffData: WeatherData? = null
 var now = System.currentTimeMillis() / 1000
 var isHourly = false
 var timeStamp: Long? = null
+
 lateinit var timelineRecyclerAdapter: TimelineRecyclerAdapter
 lateinit var recyclerView: RecyclerView
+lateinit var updatetime: TextView
 var ScheduleList: ArrayList<ScheduleEntity> = arrayListOf()
 
 
@@ -35,25 +40,31 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         mContext = this.applicationContext
         recyclerView = this.findViewById(R.id.recycler_view)
+        updatetime = this.findViewById(R.id.updateTime)
+
 
         val bottomAppBar = findViewById(R.id.appBar) as BottomAppBar
         setSupportActionBar(bottomAppBar)
 
         init()
-        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateAllSchedule()
+    }
 
 
     fun init() {
+
+        updateAllSchedule()
+
         swiperefresh.setOnRefreshListener {
             swiperefresh.isRefreshing = true // progress bar 돌아가는 작업
-            // 모든 날씨 정보를 다시 받아오는 작업
 
-            for (i in ScheduleList) {
-                MainAsyncTask(applicationContext).execute(i)
-            }
+            updateAllSchedule()
 
             // 비동기에서 작업이 끝날때 swiperefresh.isRefreshing = false해줘야함
             swiperefresh.isRefreshing = false
@@ -90,7 +101,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.navigation_route->{
+            R.id.navigation_route -> {
                 val intent = Intent(this, RouteActivity::class.java)
                 startActivity(intent)
             }
@@ -130,8 +141,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun updateAllSchedule() {
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val formatted = current.format(formatter)
 
-    object AddSchedule {
+        // 모든 날씨 정보를 다시 받아오는 작업
+        for (i in ScheduleList) {
+            MainAsyncTask(applicationContext).execute(i)
+            updatetime.setText(formatted)
+        }
+    }
+
+
+    object resetSchedule {
 
         // 리사이클러 뷰 시간순으로 정렬 후 다시 보이기
         fun resetAdapter() {
