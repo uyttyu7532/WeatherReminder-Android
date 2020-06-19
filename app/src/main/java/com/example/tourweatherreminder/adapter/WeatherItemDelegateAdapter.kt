@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import pl.hypeapp.materialtimelineview.MaterialTimelineView
 
 
-class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
+class WeatherItemDelegateAdapter() : ViewTypeDelegateAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder =
         WeatherItemViewHolder(parent)
@@ -47,23 +47,35 @@ class WeatherItemDelegateAdapter : ViewTypeDelegateAdapter {
 
             itemView.setOnClickListener {
 
-                SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
-                    .setTitleText("정말로 지우시겠습니까??")
-                    .setContentText("지우면 복구할 수 없습니다!")
-                    .setConfirmText("삭제!")
+                SweetAlertDialog(context, SweetAlertDialog.NORMAL_TYPE)
+                    .setConfirmText("수정")
                     .setConfirmClickListener { sDialog ->
-                        resetAdapter()
-
-                        val appDatabase = AppDatabase
-                        CoroutineScope(Dispatchers.IO).launch {
-                            appDatabase?.getInstance(context)?.DataDao()?.deleteSchedule(item)
-                            ScheduleList.remove(item)
-                        }
+                        // 수정 코드
                         sDialog.dismissWithAnimation() }
                     .setCancelButton(
-                        "취소"
-                    ) { sDialog -> sDialog.dismissWithAnimation() }
+                        "삭제"
+                    ) { sDialog ->
+                        SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("정말로 지우시겠습니까??")
+                            .setContentText("지우면 복구할 수 없습니다!")
+                            .setConfirmText("삭제!")
+                            .setConfirmClickListener { sDialog ->
+                                resetAdapter()
+
+                                val appDatabase = AppDatabase
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    appDatabase?.getInstance(context)?.DataDao()?.deleteSchedule(item)
+                                    ScheduleList.remove(item)
+                                }
+                                sDialog.dismissWithAnimation() }
+                            .setCancelButton(
+                                "취소"
+                            ) { sDialog -> sDialog.dismissWithAnimation() }
+                            .show()
+                        sDialog.dismissWithAnimation() }
                     .show()
+
+
             }
 
 

@@ -64,11 +64,6 @@ class MainActivity : AppCompatActivity() {
 
     fun init() {
 
-//        val current = LocalDateTime.now()
-//        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-//        val formatted = current.format(formatter)
-//        updatetime.setText(formatted)
-
 
         refreshBtn.setOnClickListener {
             updateAllSchedule()
@@ -119,6 +114,7 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                 } else {
                     Toast.makeText(this, "추가된 일정이 없습니다.", Toast.LENGTH_SHORT).show()
+                    Log.i("로그 스케줄리스트 상태", ScheduleList.size.toString() + ScheduleList.toString())
                 }
             }
             R.id.developer_info -> {
@@ -165,7 +161,6 @@ class MainActivity : AppCompatActivity() {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val formatted = current.format(formatter)
 
-        ScheduleList= ArrayList()
         // 모든 날씨 정보를 다시 받아오는 작업
         for (i in ScheduleList) {
             MainAsyncTask(applicationContext).execute(i)
@@ -196,7 +191,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 timelineRecyclerAdapter.addSchedule(ScheduleList[i], ScheduleList[i].isFirstItem)
             }
-            Log.i("로그 스케줄리스트", ScheduleList.size.toString()+ScheduleList.toString())
+            Log.i("로그 스케줄리스트", ScheduleList.size.toString() + ScheduleList.toString())
         }
 
 

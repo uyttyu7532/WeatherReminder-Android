@@ -80,7 +80,6 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
                     appDatabase?.updateSchedule(scheduleEntity)
                     Log.i("로그 ", "업데이트")
                 }
-                ScheduleList.add(scheduleEntity)
             }
         }
 

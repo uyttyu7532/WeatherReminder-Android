@@ -5,9 +5,9 @@
     <color name="colorAccent">#2E2E2E</color>
     <color name="rain">#6991B3</color>
 <!--    해-->
-    <color name="icon01">#FFCA28</color>
+    <color name="icon01">#FAC115</color>
 <!--  구름+해  -->
-    <color name="icon02">#FBDB31</color>
+    <color name="icon02">#F8D622</color>
 <!--   구름 -->
     <color name="icon03">#42A5F5</color>
 <!--   먹구름 -->
@@ -15,7 +15,7 @@
 <!--  소나기  -->
     <color name="icon09">#3480BD</color>
 <!--  비  -->
-    <color name="icon10">#364B75</color>
+    <color name="icon10">#5D7CBC</color>
 <!--   천둥번개 -->
     <color name="icon11">#5F6CB8</color>
 <!--   눈 -->

@@ -96,6 +96,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         ).showInfoWindow()
 
 
+
+
         for (i in 0..ScheduleList.size - 1) {
             Log.i("일정", "${ScheduleList[i].weather}")
             Log.i("일정", ScheduleList.size.toString())
@@ -115,9 +117,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 //                    .icon(BitmapDescriptorFactory.fromResource(makerimg))
                     .snippet(ScheduleList[i].place)
             ).showInfoWindow()
-
-
         }
+
+
+
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 16.0f))
         initMapListener()
     }

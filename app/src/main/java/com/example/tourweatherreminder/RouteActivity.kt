@@ -1,16 +1,14 @@
 package com.example.tourweatherreminder
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_route.*
 
@@ -34,6 +32,7 @@ class RouteActivity : AppCompatActivity() {
     }
 
     fun init() {
+
         markerList = ArrayList(ScheduleList.size)
         var currentSchedule = -1
 
@@ -104,6 +103,12 @@ class RouteActivity : AppCompatActivity() {
 //                    "drawable",
 //                    getPackageName()
 //                )
+//
+//                val markerimg = getResources().getIdentifier(
+//                    "pin",
+//                    "drawable",
+//                    getPackageName()
+//                )
 
                 var markeroptions = MarkerOptions()
                 markeroptions
@@ -114,7 +119,7 @@ class RouteActivity : AppCompatActivity() {
                         )
                     )
                     .title("${i + 1}번째 일정")
-//                        .icon(BitmapDescriptorFactory.fromResource(markerimg))
+//                  .icon(BitmapDescriptorFactory.fromResource(markerimg))
                     .snippet(ScheduleList[i].weather + "\t" + ScheduleList[i].rain + "\t" + ScheduleList[i].title + "\t" + ScheduleList[i].date)
 
                 markerList.add(markeroptions)

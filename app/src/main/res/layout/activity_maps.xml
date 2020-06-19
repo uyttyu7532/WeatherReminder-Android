@@ -17,12 +17,12 @@
         android:paddingTop="10dp"
         android:paddingRight="20dp"
         android:layout_margin="10dp"
-        fancy:fb_defaultColor="#7ab800"
-        fancy:fb_focusColor="#9bd823"
+        fancy:fb_defaultColor="@color/timelinecolor"
+        fancy:fb_focusColor="#FFFFFF"
         fancy:fb_iconPosition="left"
         fancy:fb_radius="5dp"
         fancy:fb_text="장소 검색하기"
-        fancy:fb_textColor="#FFFFFF"
+        fancy:fb_textColor="#000000"
         android:gravity="center"/>
 
     <fragment

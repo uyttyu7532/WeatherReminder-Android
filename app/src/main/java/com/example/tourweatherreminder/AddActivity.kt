@@ -1,10 +1,12 @@
 package com.example.tourweatherreminder
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -17,12 +19,16 @@ import com.jzxiang.pickerview.data.Type
 import com.jzxiang.pickerview.listener.OnDateSetListener
 import com.libizo.CustomEditText
 import kotlinx.android.synthetic.main.activity_add.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
 class AddActivity : AppCompatActivity(),
     OnDateSetListener {
 
+    lateinit var mContext: Context
     var latitude: Double? = null
     var longitude: Double? = null
     var timestamp: Long? = null
@@ -37,6 +43,7 @@ class AddActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
+        mContext = this.applicationContext
         initView()
         createDatePickerDialog()
 
@@ -84,12 +91,23 @@ class AddActivity : AppCompatActivity(),
 
         // 확인 버튼
         addBtn.setOnClickListener {
-            // TODO 만약 editTitleText가 db에 있는 내용이 아니거나 비어있지 않다면 추가! + 장소, 시간 선택도
-            if(editTitleText!!.currentTextColor==R.color.textwatcher){
-                Toast.makeText(this,"이미 존재하는 일정입니다.",Toast.LENGTH_SHORT).show()
-            }
-            if(editTitleText!!.text==null){
+//            CoroutineScope(Dispatchers.IO).launch {
+//                var appDatabase = AppDatabase.getInstance(mContext)?.DataDao()
+//                // true라면 이미 존재하는 것
+//                val isTitle = appDatabase?.getItemTitle(editTitleText!!.text.toString())
+//                if(isTitle!!){
+//                    Toast.makeText(mContext,"이미 존재하는 일정입니다.",Toast.LENGTH_SHORT).show()
+//                }
+//            }
+
+            if(editTitleText!!.text!!.toString().equals("")){
                 Toast.makeText(this,"일정 이름을 입력해주세요",Toast.LENGTH_SHORT).show()
+            }
+            else if(selectedDateText!!.text=="날짜 및 시간을 선택해주세요."){
+                Toast.makeText(this,"날짜 및 시간을 선택해주세요",Toast.LENGTH_SHORT).show()
+            }
+            else if(selectedPlaceText!!.text=="지도에서 장소를 선택해주세요."){
+                Toast.makeText(this,"지도에서 장소를 선택해주세요.",Toast.LENGTH_SHORT).show()
             }
             else {
                 val intent = Intent()
