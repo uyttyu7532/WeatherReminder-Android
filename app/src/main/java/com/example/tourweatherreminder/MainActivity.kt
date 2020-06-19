@@ -14,12 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tourweatherreminder.MainActivity.resetSchedule.resetAdapter
 import com.example.tourweatherreminder.db.AppDatabase
+import com.example.tourweatherreminder.db.dao.DataDao
 import com.example.tourweatherreminder.db.entity.ScheduleEntity
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.activity_main.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.ArrayList
 
 var dailyWeatherArray = arrayListOf<WeatherData>()
 var hourlyWeatherArray = arrayListOf<WeatherData>()
@@ -93,9 +95,8 @@ class MainActivity : AppCompatActivity() {
         appDatabase?.getInstance(applicationContext)?.DataDao()?.getData()?.observe(this,
             androidx.lifecycle.Observer {
                 ScheduleList.clear()
-                Log.d("뭐가 저장되어 있니?", it.toString()) // 전체 저장된 List<ScheduleEntity>
+                Log.d("로그 db내용", it.toString()) // 전체 저장된 List<ScheduleEntity>
                 it?.forEach {
-//                    it.isLastItem = false
                     ScheduleList.add(it)
                 }
                 resetAdapter()
@@ -113,8 +114,12 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.navigation_route -> {
-                val intent = Intent(this, RouteActivity::class.java)
-                startActivity(intent)
+                if (ScheduleList.size > 0) {
+                    val intent = Intent(this, RouteActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, "추가된 일정이 없습니다.", Toast.LENGTH_SHORT).show()
+                }
             }
             R.id.developer_info -> {
                 Toast.makeText(this, "스마트ict융합공학과 201714286 조예린", Toast.LENGTH_SHORT).show()
@@ -160,6 +165,7 @@ class MainActivity : AppCompatActivity() {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val formatted = current.format(formatter)
 
+        ScheduleList= ArrayList()
         // 모든 날씨 정보를 다시 받아오는 작업
         for (i in ScheduleList) {
             MainAsyncTask(applicationContext).execute(i)
@@ -183,20 +189,14 @@ class MainActivity : AppCompatActivity() {
             timelineRecyclerAdapter = TimelineRecyclerAdapter()
             recyclerView.adapter = timelineRecyclerAdapter
             recyclerView.layoutManager = LinearLayoutManager(mContext)
-//            timelineRecyclerAdapter.addWeatherHeader(
-//                CityWeather(
-//                    "Warsaw",
-//                    "Sunny", 21.5f, "5%", "56%", "25km/h"
-//                )
-//            )
+
             for (i in 0 until ScheduleList.size) {
-                if(!ScheduleList[i].isFirstItem) {
+                if (!ScheduleList[i].isFirstItem) {
                     timelineRecyclerAdapter.addTimepoint(Timepoint())
                 }
                 timelineRecyclerAdapter.addSchedule(ScheduleList[i], ScheduleList[i].isFirstItem)
             }
-            Log.i("전체 list",ScheduleList.toString())
-            Log.i("전체 list",ScheduleList.size.toString())
+            Log.i("로그 스케줄리스트", ScheduleList.size.toString()+ScheduleList.toString())
         }
 
 

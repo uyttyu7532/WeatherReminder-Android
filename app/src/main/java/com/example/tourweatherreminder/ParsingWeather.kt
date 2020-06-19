@@ -3,7 +3,9 @@ package com.example.tourweatherreminder
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
+import android.widget.Toast
 import com.example.tourweatherreminder.db.AppDatabase
+import com.example.tourweatherreminder.db.dao.DataDao
 import com.example.tourweatherreminder.db.entity.ScheduleEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,25 +25,25 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
 
     override fun doInBackground(vararg params: ScheduleEntity): ScheduleEntity? {
 
-            var url =
-                URL("https://api.openweathermap.org/data/2.5/onecall?lat=${params[0].latitude}&lon=${params[0].longitude}&&appid=0278d360e035caa40fc3debf63523512&units=metric&exclude=minutely,current")
-            val doc = Jsoup.connect(url.toString()).ignoreContentType(true).get()
-            val json = JSONObject(doc.text())
+        var url =
+            URL("https://api.openweathermap.org/data/2.5/onecall?lat=${params[0].latitude}&lon=${params[0].longitude}&&appid=0278d360e035caa40fc3debf63523512&units=metric&exclude=minutely,current")
+        val doc = Jsoup.connect(url.toString()).ignoreContentType(true).get()
+        val json = JSONObject(doc.text())
 
-            timeStamp = params[0].timestamp / 1000 - getGMTOffset(json)
-            Log.i("now파싱", now.toString())
-            Log.i("timeStamp파싱", timeStamp.toString())
-            var timeDiff = Math.abs(now - timeStamp!!)
-            Log.i("timeDiff파싱", timeDiff.toString())
-            isHourly = timeDiff < 2 * 86400 // 2일(초)
+        timeStamp = params[0].timestamp / 1000 - getGMTOffset(json)
+        Log.i("now파싱", now.toString())
+        Log.i("timeStamp파싱", timeStamp.toString())
+        var timeDiff = Math.abs(now - timeStamp!!)
+        Log.i("timeDiff파싱", timeDiff.toString())
+        isHourly = timeDiff < 2 * 86400 // 2일(초)
 
-            if (isHourly) {
-                parseHourly(json)
-                findMinDiffDt(hourlyWeatherArray)
-            } else {
-                parseDaily(json, tempTime(params[0].date))
-                findMinDiffDt(dailyWeatherArray)
-            }
+        if (isHourly) {
+            parseHourly(json)
+            findMinDiffDt(hourlyWeatherArray)
+        } else {
+            parseDaily(json, tempTime(params[0].date))
+            findMinDiffDt(dailyWeatherArray)
+        }
 
         return params[0]
 
@@ -53,7 +55,7 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
         contextRef = WeakReference(mContext)
         val context = contextRef!!.get()
         if (context != null) {
-            val appDatabase = AppDatabase
+            val appDatabase = AppDatabase?.getInstance(context)?.DataDao()
             val scheduleEntity = ScheduleEntity(
                 leastDiffData!!.icon,
                 result.title,
@@ -66,10 +68,22 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
                 result.place
             )
             CoroutineScope(Dispatchers.IO).launch {
-                appDatabase?.getInstance(context)?.DataDao()?.insertSchedule(scheduleEntity)
-                ScheduleList?.add(scheduleEntity)
+
+                // title이 이미 db에 존재하는 지 확인
+                // 있으면 true, 없으면 false
+                val isTitle = appDatabase?.getItemTitle(result.title)
+
+                if (!isTitle!!) {
+                    appDatabase?.insertSchedule(scheduleEntity)
+                    Log.i("로그 ", "인서트")
+                } else {
+                    appDatabase?.updateSchedule(scheduleEntity)
+                    Log.i("로그 ", "업데이트")
+                }
+                ScheduleList.add(scheduleEntity)
             }
         }
+
     }
 
 

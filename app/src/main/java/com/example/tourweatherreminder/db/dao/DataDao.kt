@@ -8,12 +8,15 @@ import com.example.tourweatherreminder.db.entity.ScheduleEntity
 @Dao
 abstract class DataDao : BaseDao<ScheduleEntity> {
 
-    /**
-     * Get all data from the Data table.
-     */
+
     @Query("SELECT * FROM Schedule")
     abstract fun getData(): LiveData<List<ScheduleEntity>>
-//
+
+
+    // 해당 title이 이미 존재하는지
+    @Query("SELECT exists (SELECT title FROM Schedule WHERE title = :title LIMIT 1)")
+    abstract fun getItemTitle(title: String): Boolean
+
 //    @Query("SELECT * FROM Schedule WHERE id = :id")
 //    abstract fun selectById(id: Int): ScheduleEntity
 //
@@ -30,10 +33,12 @@ abstract class DataDao : BaseDao<ScheduleEntity> {
     abstract fun deleteSchedule(schedule: ScheduleEntity)
 
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun updateSchedule(schedule: ScheduleEntity)
+
+    @Insert
     abstract fun insertSchedule(schedule: ScheduleEntity)
 
-//    @Query("UPDATE Schedule SET isLastItem= :isLastItem WHERE title = :title")
-//    abstract fun updateLastItem(title:String, isLastItem:Boolean)
+
 
 }

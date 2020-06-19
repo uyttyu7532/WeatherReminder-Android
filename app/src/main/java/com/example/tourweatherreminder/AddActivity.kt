@@ -3,10 +3,15 @@ package com.example.tourweatherreminder
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
+import com.example.tourweatherreminder.db.AppDatabase
 import com.jzxiang.pickerview.TimePickerDialog
 import com.jzxiang.pickerview.data.Type
 import com.jzxiang.pickerview.listener.OnDateSetListener
@@ -56,7 +61,7 @@ class AddActivity : AppCompatActivity(),
             .setThemeColor(R.color.timepicker_dialog_bg)
             .setType(Type.ALL)
             .setWheelItemTextNormalColor(R.color.timetimepicker_default_text_color)
-            .setWheelItemTextSelectorColor(R.color.timepicker_toolbar_bg)
+            .setWheelItemTextSelectorColor(R.color.main_green_color)
             .setWheelItemTextSize(12)
             .build()
     }
@@ -79,18 +84,43 @@ class AddActivity : AppCompatActivity(),
 
         // 확인 버튼
         addBtn.setOnClickListener {
-            val intent = Intent()
-            var title = editTitleText?.text.toString()
-            intent.putExtra("title", title)
-            intent.putExtra("timestamp", timestamp)
-            intent.putExtra("latitude", latitude)
-            intent.putExtra("longitude", longitude)
-            intent.putExtra("placeName", selectedPlaceText?.text.toString())
-            intent.putExtra("date", selectedDateText?.text.toString())
+            // TODO 만약 editTitleText가 db에 있는 내용이 아니거나 비어있지 않다면 추가! + 장소, 시간 선택도
+            if(editTitleText!!.currentTextColor==R.color.textwatcher){
+                Toast.makeText(this,"이미 존재하는 일정입니다.",Toast.LENGTH_SHORT).show()
+            }
+            if(editTitleText!!.text==null){
+                Toast.makeText(this,"일정 이름을 입력해주세요",Toast.LENGTH_SHORT).show()
+            }
+            else {
+                val intent = Intent()
+                var title = editTitleText?.text.toString()
+                intent.putExtra("title", title)
+                intent.putExtra("timestamp", timestamp)
+                intent.putExtra("latitude", latitude)
+                intent.putExtra("longitude", longitude)
+                intent.putExtra("placeName", selectedPlaceText?.text.toString())
+                intent.putExtra("date", selectedDateText?.text.toString())
 
-            setResult(Activity.RESULT_OK, intent)
-            finish()
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            }
         }
+
+//        editTitleText!!.addTextChangedListener(object : TextWatcher {
+//            override fun afterTextChanged(s: Editable?) {
+//            }
+//
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//            }
+//
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                // TODO 입력한 값이 이미 db의 id에 존재한다면 색 바꾸기
+//                if(s!=null){
+//                    editTitleText!!.setHintTextColor(resources.getColor(R.color.textwatcher))
+//                }
+//            }
+//        })
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -123,4 +153,5 @@ class AddActivity : AppCompatActivity(),
         val d = Date(time)
         return sf.format(d)
     }
+
 }

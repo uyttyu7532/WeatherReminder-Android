@@ -24,4 +24,5 @@
     <color name="icon50">#B6B6B6</color>
     <color name="windowBackground">#232323</color>
     <color name="timelinecolor">#F3EEEE</color>
+    <color name="textwatcher">#FF0047</color>
 </resources>
