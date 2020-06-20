@@ -69,9 +69,9 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
 
                 // title이 이미 db에 존재하는 지 확인
                 // 있으면 true, 없으면 false
-                val isTitle = appDatabase?.getItemTitle(result.title)
+                val isTitle = appDatabase?.getScheduleByTitle(result.title)
 
-                if (!isTitle!!) {
+                if (isTitle==null) { // title이 없다면
                     appDatabase?.insertSchedule(scheduleEntity)
                     Log.i("로그 ", "인서트")
                 } else {

@@ -4,16 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.doAfterTextChanged
 import com.example.tourweatherreminder.db.AppDatabase
+
 import com.jzxiang.pickerview.TimePickerDialog
 import com.jzxiang.pickerview.data.Type
 import com.jzxiang.pickerview.listener.OnDateSetListener
@@ -22,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_add.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -46,7 +44,20 @@ class AddActivity : AppCompatActivity(),
         mContext = this.applicationContext
         initView()
         createDatePickerDialog()
+        Log.i("로그 Add Activity진입시 isModify", isModify.toString())
+        if (isModify) {
+            isModify()
+        }
+    }
 
+    fun isModify() {
+        // title, place, lat, lon,timestamp, date
+        editTitleText?.setText(modifyList[0])
+        selectedPlaceText?.setText(modifyList[1])
+        latitude = modifyList[2].toDouble()
+        longitude = modifyList[3].toDouble()
+        timestamp = modifyList[4].toLong()
+        selectedDateText?.setText(modifyList[5])
     }
 
     fun createDatePickerDialog() {
@@ -91,52 +102,56 @@ class AddActivity : AppCompatActivity(),
 
         // 확인 버튼
         addBtn.setOnClickListener {
-//            CoroutineScope(Dispatchers.IO).launch {
-//                var appDatabase = AppDatabase.getInstance(mContext)?.DataDao()
-//                // true라면 이미 존재하는 것
-//                val isTitle = appDatabase?.getItemTitle(editTitleText!!.text.toString())
-//                if(isTitle!!){
-//                    Toast.makeText(mContext,"이미 존재하는 일정입니다.",Toast.LENGTH_SHORT).show()
-//                }
-//            }
 
-            if(editTitleText!!.text!!.toString().equals("")){
-                Toast.makeText(this,"일정 이름을 입력해주세요",Toast.LENGTH_SHORT).show()
-            }
-            else if(selectedDateText!!.text=="날짜 및 시간을 선택해주세요."){
-                Toast.makeText(this,"날짜 및 시간을 선택해주세요",Toast.LENGTH_SHORT).show()
-            }
-            else if(selectedPlaceText!!.text=="지도에서 장소를 선택해주세요."){
-                Toast.makeText(this,"지도에서 장소를 선택해주세요.",Toast.LENGTH_SHORT).show()
-            }
-            else {
-                val intent = Intent()
-                var title = editTitleText?.text.toString()
-                intent.putExtra("title", title)
-                intent.putExtra("timestamp", timestamp)
-                intent.putExtra("latitude", latitude)
-                intent.putExtra("longitude", longitude)
-                intent.putExtra("placeName", selectedPlaceText?.text.toString())
-                intent.putExtra("date", selectedDateText?.text.toString())
+            if (editTitleText!!.text!!.toString().equals("")) {
+                Toast.makeText(this, "일정 이름을 입력해주세요", Toast.LENGTH_SHORT).show()
+            } else if (selectedDateText!!.text == "날짜 및 시간을 선택해주세요.") {
+                Toast.makeText(this, "날짜 및 시간을 선택해주세요", Toast.LENGTH_SHORT).show()
+            } else if (selectedPlaceText!!.text == "지도에서 장소를 선택해주세요.") {
+                Toast.makeText(this, "지도에서 장소를 선택해주세요.", Toast.LENGTH_SHORT).show()
+            } else {
+                Log.i("isModify", isModify.toString())
+                if (!isModify) { // 추가모드
+                    Log.i("로그 추가모드진입", isModify.toString())
+                    val intent = Intent()
 
-                setResult(Activity.RESULT_OK, intent)
-                finish()
-            }
-        }
+                    var title = editTitleText?.text.toString()
+                    intent.putExtra("title", title)
+                    intent.putExtra("timestamp", timestamp)
+                    intent.putExtra("latitude", latitude)
+                    intent.putExtra("longitude", longitude)
+                    intent.putExtra("placeName", selectedPlaceText?.text.toString())
+                    intent.putExtra("date", selectedDateText?.text.toString())
+                    Log.i("로그 추가인텐트정보", intent.toString())
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                } else { // 수정 모드
+                    Log.i("로그 수정모드진입", isModify.toString())
+                    val intent = Intent()
+                    intent.putExtra("title", editTitleText!!.text!!.toString())
+                    intent.putExtra("timestamp", modifyList[4].toLong())
+                    intent.putExtra("latitude", modifyList[2].toDouble())
+                    intent.putExtra("longitude", modifyList[3].toDouble())
+                    intent.putExtra("placeName", selectedPlaceText!!.text.toString())
+                    intent.putExtra("date", selectedDateText!!.text.toString())
 
-//        editTitleText!!.addTextChangedListener(object : TextWatcher {
-//            override fun afterTextChanged(s: Editable?) {
-//            }
-//
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//            }
-//
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                if(s!=null){
-//                    editTitleText!!.setHintTextColor(resources.getColor(R.color.textwatcher))
-//                }
-//            }
-//        })
+                    Log.i("로그 지울예정인타이틀", modifyList[0].toString())
+                    val appDatabase = AppDatabase
+                    CoroutineScope(Dispatchers.IO).launch { // 원래 데이터는 일단 삭제
+                        var deleteTitle = appDatabase?.getInstance(mContext)?.DataDao()
+                            ?.getScheduleByTitle(modifyList[0])
+                        appDatabase?.getInstance(mContext)?.DataDao()
+                            ?.deleteSchedule(deleteTitle!!)
+                    }
+
+                    ScheduleList.clear()
+                    isModify = false
+                    Log.i("로그 수정인텐트정보", intent.toString())
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                }
+            } // 전체 else 끝
+        }// listener 끝
 
     }
 
@@ -148,8 +163,8 @@ class AddActivity : AppCompatActivity(),
                     selectedPlaceText?.text = data!!.getStringExtra("placeName").toString()
                     latitude = data.getDoubleExtra("latitude", 0.0)
                     longitude = data.getDoubleExtra("longitude", 0.0)
-                    timestamp = data.getLongExtra("timestamp", 0)
-                    date = data.getStringExtra("date")
+//                    timestamp = data.getLongExtra("timestamp", 0)
+//                    date = data.getStringExtra("date")
                 }
             }
         }

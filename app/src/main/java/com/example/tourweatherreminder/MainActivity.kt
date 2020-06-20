@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tourweatherreminder.MainActivity.resetSchedule.resetAdapter
 import com.example.tourweatherreminder.db.AppDatabase
-import com.example.tourweatherreminder.db.dao.DataDao
 import com.example.tourweatherreminder.db.entity.ScheduleEntity
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.activity_main.*
@@ -34,7 +33,9 @@ lateinit var timelineRecyclerAdapter: TimelineRecyclerAdapter
 lateinit var recyclerView: RecyclerView
 lateinit var updatetime: TextView
 var ScheduleList: ArrayList<ScheduleEntity> = arrayListOf()
-var WeatherList: ArrayList<String> = arrayListOf()
+//var WeatherList: ArrayList<String> = arrayListOf()
+var isModify = false
+var modifyList = arrayListOf<String>() // title, place, lat, lon,timestamp, date
 
 
 lateinit var mContext: Context
@@ -58,6 +59,11 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         updateAllSchedule()
+//        if(isModify){
+//            val intent = Intent(this, AddActivity::class.java)
+////            intent.putExtra("modify", ismodify)
+//            startActivityForResult(intent, 100)
+//        }
     }
 
 
@@ -80,6 +86,7 @@ class MainActivity : AppCompatActivity() {
 
         // 일정추가 FAB
         addFAB.setOnClickListener {
+            isModify = false
             val intent = Intent(this, AddActivity::class.java)
             startActivityForResult(intent, 100)
         }
@@ -127,6 +134,8 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
+            Log.i("로그 온액티비티result실행됨","그렇다")
+            isModify = false
             when (requestCode) {
                 100 -> {
                     var title = data!!.getStringExtra("title")
@@ -137,12 +146,12 @@ class MainActivity : AppCompatActivity() {
                     var date = data!!.getStringExtra("date")
 
                     var inputScheduleEntity = ScheduleEntity(
-                        "01d",
+                        "",
                         title,
                         date,
                         timestamp,
-                        0.0f,
-                        0.0f,
+                        null,
+                        null,
                         latitude,
                         longitude,
                         place

@@ -1,5 +1,9 @@
 package com.example.tourweatherreminder
 
+import android.app.Activity
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -35,7 +39,7 @@ class WeatherItemDelegateAdapter() : ViewTypeDelegateAdapter {
             if (item.isLastItem) {
                 item_weather_timeline.position = MaterialTimelineView.POSITION_LAST
             }
-            if(item.isFirstItem){
+            if (item.isFirstItem) {
                 item_weather_timeline.position = MaterialTimelineView.POSITION_FIRST
             }
 
@@ -52,7 +56,25 @@ class WeatherItemDelegateAdapter() : ViewTypeDelegateAdapter {
                     .setConfirmText("수정")
                     .setConfirmClickListener { sDialog ->
                         // 수정 코드
-                        sDialog.dismissWithAnimation() }
+                        isModify = true
+                        // title, place, lat, lon,timestamp, date
+                        modifyList = arrayListOf(
+                            item.title,
+                            item.place,
+                            item.latitude.toString(),
+                            item.longitude.toString(),
+                            item.timestamp.toString(),
+                            item.date
+                        )
+                        if (isModify) {
+                            val intent = Intent(context, AddActivity::class.java)
+                            intent.addFlags(FLAG_ACTIVITY_SINGLE_TOP)
+                            (context as Activity).startActivityForResult(intent, 100)
+                        }
+
+
+                        sDialog.dismissWithAnimation()
+                    }
                     .setCancelButton(
                         "삭제"
                     ) { sDialog ->
@@ -65,18 +87,19 @@ class WeatherItemDelegateAdapter() : ViewTypeDelegateAdapter {
 
                                 val appDatabase = AppDatabase
                                 CoroutineScope(Dispatchers.IO).launch {
-                                    appDatabase?.getInstance(context)?.DataDao()?.deleteSchedule(item)
-                                    ScheduleList.remove(item)
+                                    appDatabase?.getInstance(context)?.DataDao()
+                                        ?.deleteSchedule(item)
                                 }
-                                sDialog.dismissWithAnimation() }
+                                Log.i("로그 어댑터에서 스케줄 삭제함",item.toString())
+                                sDialog.dismissWithAnimation()
+                            }
                             .setCancelButton(
                                 "취소"
                             ) { sDialog -> sDialog.dismissWithAnimation() }
                             .show()
-                        sDialog.dismissWithAnimation() }
+                        sDialog.dismissWithAnimation()
+                    }
                     .show()
-
-
             }
 
 
