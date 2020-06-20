@@ -3,7 +3,6 @@ package com.example.tourweatherreminder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_weather_header.view.*
 
 
 class WeatherHeaderItemDelegateAdapter : ViewTypeDelegateAdapter {

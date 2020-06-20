@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:backgroundTint="@color/timelinecolor"
+            android:backgroundTint="#ffffff"
             android:elevation="3dp"
             app:cardCornerRadius="5dp">
 
@@ -116,8 +116,8 @@
             android:paddingTop="10dp"
             android:paddingRight="20dp"
             android:paddingBottom="10dp"
-            fancy:fb_defaultColor="@color/timelinecolor"
-            fancy:fb_focusColor="#FFFFFF"
+            fancy:fb_defaultColor="#ffffff"
+            fancy:fb_focusColor="@color/timelinecolor"
             fancy:fb_iconPosition="left"
             fancy:fb_radius="5dp"
             fancy:fb_text="일정 추가하기"

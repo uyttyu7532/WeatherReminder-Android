@@ -48,6 +48,7 @@ class WeatherItemDelegateAdapter() : ViewTypeDelegateAdapter {
             itemView.setOnClickListener {
 
                 SweetAlertDialog(context, SweetAlertDialog.NORMAL_TYPE)
+                    .setContentText("원하는 기능을 선택해주세요")
                     .setConfirmText("수정")
                     .setConfirmClickListener { sDialog ->
                         // 수정 코드

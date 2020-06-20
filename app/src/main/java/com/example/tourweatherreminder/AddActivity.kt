@@ -132,7 +132,6 @@ class AddActivity : AppCompatActivity(),
 //            }
 //
 //            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                // TODO 입력한 값이 이미 db의 id에 존재한다면 색 바꾸기
 //                if(s!=null){
 //                    editTitleText!!.setHintTextColor(resources.getColor(R.color.textwatcher))
 //                }

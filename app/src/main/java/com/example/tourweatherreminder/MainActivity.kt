@@ -34,6 +34,7 @@ lateinit var timelineRecyclerAdapter: TimelineRecyclerAdapter
 lateinit var recyclerView: RecyclerView
 lateinit var updatetime: TextView
 var ScheduleList: ArrayList<ScheduleEntity> = arrayListOf()
+var WeatherList: ArrayList<String> = arrayListOf()
 
 
 lateinit var mContext: Context
@@ -50,8 +51,6 @@ class MainActivity : AppCompatActivity() {
 
         val bottomAppBar = findViewById(R.id.appBar) as BottomAppBar
         setSupportActionBar(bottomAppBar)
-
-        updateAllSchedule()
 
         init()
     }
@@ -86,7 +85,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         val appDatabase = AppDatabase
-
         appDatabase?.getInstance(applicationContext)?.DataDao()?.getData()?.observe(this,
             androidx.lifecycle.Observer {
                 ScheduleList.clear()
@@ -139,12 +137,12 @@ class MainActivity : AppCompatActivity() {
                     var date = data!!.getStringExtra("date")
 
                     var inputScheduleEntity = ScheduleEntity(
-                        null,
+                        "01d",
                         title,
                         date,
                         timestamp,
-                        null,
-                        null,
+                        0.0f,
+                        0.0f,
                         latitude,
                         longitude,
                         place
