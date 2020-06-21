@@ -51,6 +51,7 @@ class AddActivity : AppCompatActivity(),
     }
 
     fun isModify() {
+        addBtn.setText("일정 수정하기")
         // title, place, lat, lon,timestamp, date
         editTitleText?.setText(modifyList[0])
         selectedPlaceText?.setText(modifyList[1])
@@ -129,9 +130,9 @@ class AddActivity : AppCompatActivity(),
                     Log.i("로그 수정모드진입", isModify.toString())
                     val intent = Intent()
                     intent.putExtra("title", editTitleText!!.text!!.toString())
-                    intent.putExtra("timestamp", modifyList[4].toLong())
-                    intent.putExtra("latitude", modifyList[2].toDouble())
-                    intent.putExtra("longitude", modifyList[3].toDouble())
+                    intent.putExtra("timestamp", timestamp) // 바뀔수있음
+                    intent.putExtra("latitude", latitude) // 바뀔수있음
+                    intent.putExtra("longitude", longitude) // 바뀔수있음
                     intent.putExtra("placeName", selectedPlaceText!!.text.toString())
                     intent.putExtra("date", selectedDateText!!.text.toString())
 

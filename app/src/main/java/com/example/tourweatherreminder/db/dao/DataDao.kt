@@ -9,8 +9,11 @@ import com.example.tourweatherreminder.db.entity.ScheduleEntity
 abstract class DataDao : BaseDao<ScheduleEntity> {
 
 
-    @Query("SELECT * FROM Schedule")
+    @Query("SELECT * FROM Schedule ORDER BY timestamp ")
     abstract fun getData(): LiveData<List<ScheduleEntity>>
+
+    @Query("SELECT * FROM Schedule ORDER BY timestamp ")
+    abstract fun getData2(): List<ScheduleEntity>
 
     // 해당 title이 이미 존재하는지
 //    @Query("SELECT exists (SELECT title FROM Schedule WHERE title = :title LIMIT 1)")

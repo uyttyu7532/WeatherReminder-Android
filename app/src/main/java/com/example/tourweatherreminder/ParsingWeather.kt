@@ -1,10 +1,22 @@
 package com.example.tourweatherreminder
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.AsyncTask
+import android.os.Build
 import android.util.Log
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.example.tourweatherreminder.db.AppDatabase
 import com.example.tourweatherreminder.db.entity.ScheduleEntity
+import com.example.tourweatherreminder.model.makeNotification
+import com.example.tourweatherreminder.model.notificationContent
+import com.example.tourweatherreminder.model.notificationResultCnt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,9 +59,10 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
 
     }
 
+
     override fun onPostExecute(result: ScheduleEntity) {
         super.onPostExecute(result)
-
+        notificationResultCnt++
         contextRef = WeakReference(mContext)
         val context = contextRef!!.get()
         if (context != null) {
@@ -71,14 +84,23 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
                 // 있으면 true, 없으면 false
                 val isTitle = appDatabase?.getScheduleByTitle(result.title)
 
-                if (isTitle==null) { // title이 없다면
+                if (isTitle == null) { // title이 없다면
                     appDatabase?.insertSchedule(scheduleEntity)
                     Log.i("로그 ", "인서트")
                 } else {
+
+                    if (isTitle.weather != null && isTitle.weather != scheduleEntity.weather) {
+                        notificationContent += "${isTitle.weather}\n"
+                        Log.i("로그 ", "날씨바뀜")
+                    }
                     appDatabase?.updateSchedule(scheduleEntity)
                     Log.i("로그 ", "업데이트")
                 }
             }
+        }
+
+        if(notificationResultCnt == ScheduleList.size){
+            makeNotification()
         }
 
     }

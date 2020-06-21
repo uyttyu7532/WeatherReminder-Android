@@ -13,8 +13,8 @@ data class ScheduleEntity(
     var timestamp: Long,
     var temp: Float?,
     var rain: Float?,
-    var latitude:Double?,
-    var longitude:Double?,
+    var latitude: Double?,
+    var longitude: Double?,
     var place: String,
     var isFirstItem: Boolean = false,
     var isLastItem: Boolean = false

@@ -1,9 +1,13 @@
 package com.example.tourweatherreminder
 
 import android.app.Activity
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -15,12 +19,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tourweatherreminder.MainActivity.resetSchedule.resetAdapter
 import com.example.tourweatherreminder.db.AppDatabase
 import com.example.tourweatherreminder.db.entity.ScheduleEntity
+import com.example.tourweatherreminder.model.MyJobService
+import com.example.tourweatherreminder.model.makeNotification
+import com.example.tourweatherreminder.model.notificationContent
+import com.example.tourweatherreminder.model.notificationResultCnt
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.activity_main.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.concurrent.TimeUnit
 
 var dailyWeatherArray = arrayListOf<WeatherData>()
 var hourlyWeatherArray = arrayListOf<WeatherData>()
@@ -33,6 +40,7 @@ lateinit var timelineRecyclerAdapter: TimelineRecyclerAdapter
 lateinit var recyclerView: RecyclerView
 lateinit var updatetime: TextView
 var ScheduleList: ArrayList<ScheduleEntity> = arrayListOf()
+
 //var WeatherList: ArrayList<String> = arrayListOf()
 var isModify = false
 var modifyList = arrayListOf<String>() // title, place, lat, lon,timestamp, date
@@ -54,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(bottomAppBar)
 
         init()
+
     }
 
     override fun onResume() {
@@ -68,6 +77,20 @@ class MainActivity : AppCompatActivity() {
 
 
     fun init() {
+//        val js = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+//        val serviceComponent = ComponentName(this, MyJobService::class.java)
+//        val jobInfo = JobInfo.Builder(22, serviceComponent)
+//            .setMinimumLatency(TimeUnit.MINUTES.toMillis(1))
+//            .setOverrideDeadline(TimeUnit.MINUTES.toMillis(3))
+//            .build()
+//        js.schedule(jobInfo)
+
+        val js = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        val serviceComponent = ComponentName(this, MyJobService::class.java)
+        val jobInfo = JobInfo.Builder(22, serviceComponent)
+            .setPeriodic(TimeUnit.MINUTES.toMillis(15))
+            .build()
+        js.schedule(jobInfo)
 
 
         refreshBtn.setOnClickListener {
@@ -91,6 +114,7 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(intent, 100)
         }
 
+
         val appDatabase = AppDatabase
         appDatabase?.getInstance(applicationContext)?.DataDao()?.getData()?.observe(this,
             androidx.lifecycle.Observer {
@@ -101,7 +125,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 resetAdapter()
             })
-
+//        appDatabase?.getInstance(applicationContext)?.DataDao()?.isWeatherChanged()?.observe(this,
+//            androidx.lifecycle.Observer {
+//                Log.d("로그 isWeatherChanged", it.toString()) // 전체 저장된 List<ScheduleEntity>
+//
+//            })
 
     }
 
@@ -134,7 +162,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-            Log.i("로그 온액티비티result실행됨","그렇다")
+            Log.i("로그 온액티비티result실행됨", "그렇다")
             isModify = false
             when (requestCode) {
                 100 -> {
@@ -163,27 +191,37 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun updateAllSchedule() {
-        val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        val formatted = current.format(formatter)
 
-        // 모든 날씨 정보를 다시 받아오는 작업
-        for (i in ScheduleList) {
-            MainAsyncTask(applicationContext).execute(i)
-        }
-        updatetime.setText(formatted)
+    fun updateAllSchedule() {
+        Handler().postDelayed(Runnable
+        {
+            val current = LocalDateTime.now()
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            val formatted = current.format(formatter)
+
+            notificationContent = ""
+            notificationResultCnt = 0
+            //makeNotification(content)
+            // 모든 날씨 정보를 다시 받아오는 작업
+            for (i in ScheduleList) {
+                MainAsyncTask(applicationContext).execute(i)
+            }
+            updatetime.setText(formatted)
+        }, 1000)
+
+
     }
 
 
     object resetSchedule {
 
-        // 리사이클러 뷰 시간순으로 정렬 후 다시 보이기
+
         fun resetAdapter() {
-            Collections.sort(ScheduleList, object : Comparator<ScheduleEntity> {
-                override fun compare(x: ScheduleEntity, y: ScheduleEntity) =
-                    x.date.compareTo(y.date)
-            })
+            // 리사이클러 뷰 시간순으로 정렬 후 다시 보이기 -> db에서 ORDERBY로 해결
+//            Collections.sort(ScheduleList, object : Comparator<ScheduleEntity> {
+//                override fun compare(x: ScheduleEntity, y: ScheduleEntity) =
+//                    x.date.compareTo(y.date)
+//            })
             if (ScheduleList.size > 0) {
                 ScheduleList[0].isFirstItem = true
                 ScheduleList[ScheduleList.size - 1].isLastItem = true
