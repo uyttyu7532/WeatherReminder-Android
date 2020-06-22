@@ -72,7 +72,6 @@ class WeatherItemDelegateAdapter() : ViewTypeDelegateAdapter {
                             (context as Activity).startActivityForResult(intent, 100)
                         }
 
-
                         sDialog.dismissWithAnimation()
                     }
                     .setCancelButton(
@@ -90,7 +89,7 @@ class WeatherItemDelegateAdapter() : ViewTypeDelegateAdapter {
                                     appDatabase?.getInstance(context)?.DataDao()
                                         ?.deleteSchedule(item)
                                 }
-                                Log.i("로그 어댑터에서 스케줄 삭제함",item.toString())
+                                Log.i("로그 어댑터에서 스케줄 삭제함", item.toString())
                                 sDialog.dismissWithAnimation()
                             }
                             .setCancelButton(

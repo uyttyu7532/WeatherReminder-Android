@@ -3,7 +3,6 @@ package com.example.tourweatherreminder.model
 import android.app.job.JobParameters
 import android.app.job.JobService
 import android.util.Log
-import com.example.tourweatherreminder.MainActivity
 import com.example.tourweatherreminder.MainAsyncTask
 import com.example.tourweatherreminder.ScheduleList
 import com.example.tourweatherreminder.db.AppDatabase
@@ -14,7 +13,7 @@ import kotlinx.coroutines.launch
 class MyJobService : JobService() {
 
     override fun onStartJob(params: JobParameters): Boolean {
-        Log.d("로그", "onStartJob: ${params.jobId} ${applicationContext == null}")
+        Log.d("로그", "onStartJob: ${params.jobId} ${notificationContent}")
 
         ScheduleList.clear()
         val appDatabase = AppDatabase
@@ -32,11 +31,7 @@ class MyJobService : JobService() {
                 MainAsyncTask(applicationContext).execute(i)
             }
         }
-
-
-
-
-        return false
+        return true
     }
 
 

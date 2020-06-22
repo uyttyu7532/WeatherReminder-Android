@@ -16,7 +16,7 @@ fun makeNotification() {
     if (mContext == null || notificationContent == "") {
         return
     }
-    var CHANNEL_ID = "hi"
+    var CHANNEL_ID = "notification_weather"
     var notiId = 123
     createNotificationChannel(
         mContext,

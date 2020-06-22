@@ -24,6 +24,8 @@ import org.json.JSONObject
 import org.jsoup.Jsoup
 import java.lang.ref.WeakReference
 import java.net.URL
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -32,52 +34,81 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
 
     private var contextRef: WeakReference<Context>? = null
     val mContext = context
+    var isPast = false
 
     override fun doInBackground(vararg params: ScheduleEntity): ScheduleEntity? {
-
-        var url =
-            URL("https://api.openweathermap.org/data/2.5/onecall?lat=${params[0].latitude}&lon=${params[0].longitude}&&appid=0278d360e035caa40fc3debf63523512&units=metric&exclude=minutely,current")
-        val doc = Jsoup.connect(url.toString()).ignoreContentType(true).get()
-        val json = JSONObject(doc.text())
-
-        timeStamp = params[0].timestamp / 1000 - getGMTOffset(json)
-        Log.i("now파싱", now.toString())
-        Log.i("timeStamp파싱", timeStamp.toString())
-        var timeDiff = Math.abs(now - timeStamp!!)
-        Log.i("timeDiff파싱", timeDiff.toString())
-        isHourly = timeDiff < 2 * 86400 // 2일(초)
-
-        if (isHourly) {
-            parseHourly(json)
-            findMinDiffDt(hourlyWeatherArray)
-        } else {
-            parseDaily(json, tempTime(params[0].date))
-            findMinDiffDt(dailyWeatherArray)
+        // 예전일정이라면
+        if (params[0].timestamp < System.currentTimeMillis()+1000*60*60*9) {
+            isPast = true
+            return params[0]
         }
 
-        return params[0]
+        else {
+            isPast = false
 
+            var url =
+                URL("https://api.openweathermap.org/data/2.5/onecall?lat=${params[0].latitude}&lon=${params[0].longitude}&&appid=0278d360e035caa40fc3debf63523512&units=metric&exclude=minutely,current")
+            val doc = Jsoup.connect(url.toString()).ignoreContentType(true).get()
+            val json = JSONObject(doc.text())
+
+            timeStamp = params[0].timestamp / 1000 - getGMTOffset(json)
+            Log.i("now파싱", now.toString())
+            Log.i("timeStamp파싱", timeStamp.toString())
+            var timeDiff = Math.abs(now - timeStamp!!)
+            Log.i("timeDiff파싱", timeDiff.toString())
+            isHourly = timeDiff < 2 * 86400 // 2일(초)
+
+            if (isHourly) {
+                parseHourly(json)
+                findMinDiffDt(hourlyWeatherArray)
+            } else {
+                parseDaily(json, tempTime(params[0].date))
+                findMinDiffDt(dailyWeatherArray)
+            }
+
+            return params[0]
+        }
     }
 
 
     override fun onPostExecute(result: ScheduleEntity) {
         super.onPostExecute(result)
         notificationResultCnt++
+        Log.i("로그 result","${result}")
+        Log.i("로그 notificationResultCnt","${notificationResultCnt}")
         contextRef = WeakReference(mContext)
         val context = contextRef!!.get()
         if (context != null) {
+            val scheduleEntity : ScheduleEntity
             val appDatabase = AppDatabase?.getInstance(context)?.DataDao()
-            val scheduleEntity = ScheduleEntity(
-                leastDiffData!!.icon,
-                result.title,
-                result.date,
-                result.timestamp,
-                leastDiffData!!.temp,
-                leastDiffData!!.rain,
-                result.latitude,
-                result.longitude,
-                result.place
-            )
+            Log.i("로그 과거인가", isPast.toString())
+            if(isPast){
+                scheduleEntity = ScheduleEntity(
+                    result.weather,
+                    result.title,
+                    result.date,
+                    result.timestamp,
+                    result.temp,
+                    result.rain,
+                    result.latitude,
+                    result.longitude,
+                    result.place
+                )
+                Log.i("로그 과거데이터", scheduleEntity.toString())
+            }else {
+                scheduleEntity = ScheduleEntity(
+                    leastDiffData!!.icon,
+                    result.title,
+                    result.date,
+                    result.timestamp,
+                    leastDiffData!!.temp,
+                    leastDiffData!!.rain,
+                    result.latitude,
+                    result.longitude,
+                    result.place
+                )
+            }
+
             CoroutineScope(Dispatchers.IO).launch {
 
                 // title이 이미 db에 존재하는 지 확인
@@ -90,7 +121,7 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
                 } else {
 
                     if (isTitle.weather != null && isTitle.weather != scheduleEntity.weather) {
-                        notificationContent += "${isTitle.weather}\n"
+                        notificationContent += "${isTitle.title} 날씨 정보가 변경되었습니다.\n"
                         Log.i("로그 ", "날씨바뀜")
                     }
                     appDatabase?.updateSchedule(scheduleEntity)
@@ -99,8 +130,13 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
             }
         }
 
-        if(notificationResultCnt == ScheduleList.size){
+
+        if (notificationResultCnt == ScheduleList.size) {
             makeNotification()
+            val current = LocalDateTime.now().plusHours(9)
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            val formatted = current.format(formatter)
+            updatetime.setText(formatted)
         }
 
     }

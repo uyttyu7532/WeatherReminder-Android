@@ -88,7 +88,9 @@ class MainActivity : AppCompatActivity() {
         val js = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
         val serviceComponent = ComponentName(this, MyJobService::class.java)
         val jobInfo = JobInfo.Builder(22, serviceComponent)
+            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
             .setPeriodic(TimeUnit.MINUTES.toMillis(15))
+//            .setPersisted(true)
             .build()
         js.schedule(jobInfo)
 
@@ -195,27 +197,20 @@ class MainActivity : AppCompatActivity() {
     fun updateAllSchedule() {
         Handler().postDelayed(Runnable
         {
-            val current = LocalDateTime.now()
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-            val formatted = current.format(formatter)
-
             notificationContent = ""
             notificationResultCnt = 0
-            //makeNotification(content)
             // 모든 날씨 정보를 다시 받아오는 작업
             for (i in ScheduleList) {
                 MainAsyncTask(applicationContext).execute(i)
             }
-            updatetime.setText(formatted)
-        }, 1000)
+        }, 1000
+        )
 
 
     }
 
 
     object resetSchedule {
-
-
         fun resetAdapter() {
             // 리사이클러 뷰 시간순으로 정렬 후 다시 보이기 -> db에서 ORDERBY로 해결
 //            Collections.sort(ScheduleList, object : Comparator<ScheduleEntity> {
