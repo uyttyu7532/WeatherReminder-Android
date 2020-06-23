@@ -12,6 +12,7 @@ import com.example.tourweatherreminder.mContext
 var notificationContent: String = ""
 var notificationResultCnt: Int = 0
 
+// 상태바 알림 생성
 fun makeNotification() {
     if (mContext == null || notificationContent == "") {
         return
@@ -40,6 +41,7 @@ fun makeNotification() {
     notificationManager.notify(notiId, builder.build())
 }
 
+// 알림 채널 생성
 fun createNotificationChannel(
     context: Context, importance: Int, showBadge: Boolean,
     name: String, description: String

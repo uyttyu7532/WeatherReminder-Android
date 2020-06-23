@@ -50,9 +50,9 @@ class AddActivity : AppCompatActivity(),
         }
     }
 
+    // 수정 모드라면 기존 일정 정보 표시하기
     fun isModify() {
         addBtn.setText("일정 수정하기")
-        // title, place, lat, lon,timestamp, date
         editTitleText?.setText(modifyList[0])
         selectedPlaceText?.setText(modifyList[1])
         latitude = modifyList[2].toDouble()
@@ -61,6 +61,7 @@ class AddActivity : AppCompatActivity(),
         selectedDateText?.setText(modifyList[5])
     }
 
+    // datePicker 다이얼로그 표시
     fun createDatePickerDialog() {
         val sevenDays = 7 * 1000 * 60 * 60 * 24L
         mDialogAll = TimePickerDialog.Builder()
@@ -74,8 +75,8 @@ class AddActivity : AppCompatActivity(),
             .setHourText("시")
             .setMinuteText("분")
             .setCyclic(false)
-            .setMinMillseconds(System.currentTimeMillis()+1000*60*60*9)
-            .setMaxMillseconds(System.currentTimeMillis() + sevenDays+1000*60*60*9)
+            .setMinMillseconds(System.currentTimeMillis())
+            .setMaxMillseconds(System.currentTimeMillis() + sevenDays)
             .setCurrentMillseconds(System.currentTimeMillis())
             .setThemeColor(R.color.timepicker_dialog_bg)
             .setType(Type.ALL)
@@ -172,6 +173,7 @@ class AddActivity : AppCompatActivity(),
     }
 
 
+    // 선택한 시간 정보 저장 및 표시
     override fun onDateSet(
         timePickerDialog: TimePickerDialog,
         millseconds: Long
@@ -182,6 +184,7 @@ class AddActivity : AppCompatActivity(),
         timestamp = millseconds
     }
 
+    // 선택한 시간 정보를 timestamp에서 날짜 형식에 맞춰 변경
     fun getDateToString(time: Long): String {
         val d = Date(time)
         return sf.format(d)

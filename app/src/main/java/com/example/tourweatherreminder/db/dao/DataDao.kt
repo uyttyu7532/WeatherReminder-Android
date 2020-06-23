@@ -8,10 +8,11 @@ import com.example.tourweatherreminder.db.entity.ScheduleEntity
 @Dao
 abstract class DataDao : BaseDao<ScheduleEntity> {
 
-
+    // 전체 DB에 저장된 데이터 가져오기(LiveData)
     @Query("SELECT * FROM Schedule ORDER BY timestamp ")
     abstract fun getData(): LiveData<List<ScheduleEntity>>
 
+    // 전체 DB에 저장된 데이터 가져오기
     @Query("SELECT * FROM Schedule ORDER BY timestamp ")
     abstract fun getData2(): List<ScheduleEntity>
 
@@ -19,15 +20,7 @@ abstract class DataDao : BaseDao<ScheduleEntity> {
 //    @Query("SELECT exists (SELECT title FROM Schedule WHERE title = :title LIMIT 1)")
 //    abstract fun getItemTitle(title: String): Boolean
 
-//    @Query("SELECT weather FROM Schedule")
-//    abstract fun isWeatherChanged(): LiveData<List<String>>
-
-//    @Query("SELECT title ,weather FROM Schedule")
-//    abstract fun getWeather(): LiveData<String>
-
-//    @Delete
-//    abstract fun deleteSchedule(schedule: ScheduleEntity)
-
+    // title로 ScheduleEntity 찾기 (수정/ 추가모드 위해 데이터 존재 여부 확인)
     @Query("SELECT * FROM Schedule WHERE title = :title")
     abstract fun getScheduleByTitle(title: String): ScheduleEntity
 
@@ -40,7 +33,4 @@ abstract class DataDao : BaseDao<ScheduleEntity> {
 
     @Insert
     abstract fun insertSchedule(schedule: ScheduleEntity)
-
-
-
 }

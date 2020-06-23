@@ -89,7 +89,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
-    // 클릭했을 때
+    // 지도에서 직접 클릭하여 장소 선택
     fun initMapListener() {
         mMap.setOnMapClickListener {
             mMap.clear()

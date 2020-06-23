@@ -26,7 +26,6 @@ class RouteActivity : AppCompatActivity() {
         setContentView(R.layout.activity_route)
         initMap()
 
-
         init()
 
     }
@@ -143,3 +142,4 @@ class RouteActivity : AppCompatActivity() {
 
 
 }
+

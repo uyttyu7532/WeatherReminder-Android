@@ -85,6 +85,7 @@ class MainActivity : AppCompatActivity() {
 //            .build()
 //        js.schedule(jobInfo)
 
+        // 일정주기마다 JobScheduler 실행
         val js = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
         val serviceComponent = ComponentName(this, MyJobService::class.java)
         val jobInfo = JobInfo.Builder(22, serviceComponent)
@@ -205,8 +206,6 @@ class MainActivity : AppCompatActivity() {
             }
         }, 1000
         )
-
-
     }
 
 
@@ -233,8 +232,6 @@ class MainActivity : AppCompatActivity() {
             }
             Log.i("로그 스케줄리스트", ScheduleList.size.toString() + ScheduleList.toString())
         }
-
-
     }
 }
 

@@ -1,17 +1,10 @@
 package com.example.tourweatherreminder
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+
 import android.content.Context
-import android.content.Intent
-import android.graphics.BitmapFactory
+
 import android.os.AsyncTask
-import android.os.Build
 import android.util.Log
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import com.example.tourweatherreminder.db.AppDatabase
 import com.example.tourweatherreminder.db.entity.ScheduleEntity
 import com.example.tourweatherreminder.model.makeNotification
@@ -36,14 +29,13 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
     val mContext = context
     var isPast = false
 
+    // 과거 일정인지, 2일 이내 일정인지 아닌지 확인 후 파싱함수 호출
     override fun doInBackground(vararg params: ScheduleEntity): ScheduleEntity? {
         // 예전일정이라면
-        if (params[0].timestamp < System.currentTimeMillis()+1000*60*60*9) {
+        if (params[0].timestamp < System.currentTimeMillis()) {
             isPast = true
             return params[0]
-        }
-
-        else {
+        } else {
             isPast = false
 
             var url =
@@ -52,11 +44,12 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
             val json = JSONObject(doc.text())
 
             timeStamp = params[0].timestamp / 1000 - getGMTOffset(json)
+            var timeDiff = Math.abs(now - timeStamp!!)
+            isHourly = timeDiff < 2 * 86400 // 2일(초)
+
             Log.i("now파싱", now.toString())
             Log.i("timeStamp파싱", timeStamp.toString())
-            var timeDiff = Math.abs(now - timeStamp!!)
             Log.i("timeDiff파싱", timeDiff.toString())
-            isHourly = timeDiff < 2 * 86400 // 2일(초)
 
             if (isHourly) {
                 parseHourly(json)
@@ -70,19 +63,20 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
         }
     }
 
-
+    // 사용자가 등록한 일정 정보와 파싱한 날씨 정보를 합쳐서
+    // title존재 여부에 따라 DB에 일정 추가 또는 수정
     override fun onPostExecute(result: ScheduleEntity) {
         super.onPostExecute(result)
         notificationResultCnt++
-        Log.i("로그 result","${result}")
-        Log.i("로그 notificationResultCnt","${notificationResultCnt}")
+        Log.i("로그 result", "${result}")
+        Log.i("로그 notificationResultCnt", "${notificationResultCnt}")
         contextRef = WeakReference(mContext)
         val context = contextRef!!.get()
         if (context != null) {
-            val scheduleEntity : ScheduleEntity
+            val scheduleEntity: ScheduleEntity
             val appDatabase = AppDatabase?.getInstance(context)?.DataDao()
             Log.i("로그 과거인가", isPast.toString())
-            if(isPast){
+            if (isPast) {
                 scheduleEntity = ScheduleEntity(
                     result.weather,
                     result.title,
@@ -95,7 +89,7 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
                     result.place
                 )
                 Log.i("로그 과거데이터", scheduleEntity.toString())
-            }else {
+            } else {
                 scheduleEntity = ScheduleEntity(
                     leastDiffData!!.icon,
                     result.title,
@@ -133,7 +127,7 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
 
         if (notificationResultCnt == ScheduleList.size) {
             makeNotification()
-            val current = LocalDateTime.now().plusHours(9)
+            val current = LocalDateTime.now()
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
             val formatted = current.format(formatter)
             updatetime.setText(formatted)
@@ -141,7 +135,7 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
 
     }
 
-
+    // 파싱된 날씨 정보 중 가장 가까운 시간의 날씨 정보 반환
     fun findMinDiffDt(WeatherArray: ArrayList<WeatherData>): WeatherData {
         var diff: Long = Math.abs(WeatherArray[0].dt - timeStamp!!)
 
@@ -159,11 +153,11 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
         return leastDiffData as WeatherData
     }
 
-
+    // 일별 날씨 파싱
     fun parseDaily(json: JSONObject, tempTime: String) {
         dailyWeatherArray = arrayListOf<WeatherData>()
         val dailyWeather = json.getJSONArray("daily")
-//    Log.i("파싱daily", dailyWeather.toString())
+        Log.i("파싱daily", dailyWeather.toString())
 
         for (i in 0 until dailyWeather.length()) {
 
@@ -186,7 +180,9 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
         Log.i("daily파싱파싱", dailyWeatherArray.toString())
     }
 
+    // 시간별 날씨 파싱
     fun parseHourly(json: JSONObject) {
+        Log.i("hourly파싱", hourlyWeatherArray.toString())
         hourlyWeatherArray = arrayListOf<WeatherData>()
         val hourlyWeather = json.getJSONArray("hourly")
         for (i in 0 until hourlyWeather.length()) {
@@ -204,10 +200,10 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
             }
             hourlyWeatherArray.add(WeatherData(dt, temp, icon, rain))
         }
-        Log.i("hourly파싱", hourlyWeatherArray.toString())
+
     }
 
-
+    // 등록된 장소의 시차 정보 가져오기
     fun getGMTOffset(json: JSONObject): Long {
         var GMToffset = json.getString("timezone_offset")
         Log.i("파싱offset", GMToffset)
@@ -215,10 +211,10 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
         return GMToffset.toLong()
     }
 
-
+    // 아침/낮/저녁/밤 시간 정보 확인
     fun tempTime(date: String): String {
 
-        var tempTime = "null"
+        var tempTime = ""
 
         var hour = date?.split(":")?.get(0)?.split(" ")?.get(1)
         Log.i("hour파싱", hour)
