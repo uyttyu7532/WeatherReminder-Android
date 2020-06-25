@@ -117,7 +117,7 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
                 } else {
 
                     if (isTitle.weather != null && isTitle.weather != scheduleEntity.weather) {
-                        notificationContent += "${isTitle.title} 일정의 날씨 정보가 변경되었습니다.\n"
+                        notificationContent += "<${isTitle.title}> 일정의 날씨 정보가 변경되었습니다.\n"
                         Log.i("로그 ", "날씨바뀜")
                     }
                     appDatabase?.updateSchedule(scheduleEntity)

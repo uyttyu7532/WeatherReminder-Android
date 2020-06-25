@@ -19,7 +19,6 @@
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -36,9 +35,7 @@
             android:label="@string/title_activity_maps" />
         <activity android:name=".SearchPlaceActivity" />
         <activity android:name=".AddActivity" />
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity"/>
 
         <service
             android:name=".model.MyJobService"

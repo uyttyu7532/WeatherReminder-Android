@@ -18,7 +18,9 @@ var notificationResultCnt: Int = 0
 
 // 상태바 알림 생성
 fun makeNotification() {
-    if (mContext == null || notificationContent == "") {
+    if (mContext == null
+        || notificationContent == ""
+    ) {
         return
     }
     var CHANNEL_ID = "notification_weather"

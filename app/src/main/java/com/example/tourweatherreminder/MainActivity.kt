@@ -11,6 +11,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.View.*
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -99,7 +100,7 @@ class MainActivity : AppCompatActivity() {
         val serviceComponent = ComponentName(this, MyJobService::class.java)
         val jobInfo = JobInfo.Builder(22, serviceComponent)
 //            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
-            .setPeriodic(TimeUnit.MINUTES.toMillis(15))
+            .setPeriodic(TimeUnit.MINUTES.toMillis(30))
 //            .setPersisted(true)
             .build()
         js.schedule(jobInfo)
@@ -215,6 +216,14 @@ class MainActivity : AppCompatActivity() {
             // 모든 날씨 정보를 다시 받아오는 작업
             for (i in ScheduleList) {
                 MainAsyncTask(applicationContext).execute(i)
+            }
+            if(ScheduleList.size==0){
+                val current = LocalDateTime.now()
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                val formatted = current.format(formatter)
+                updatetime.setText(formatted)
+                refreshbtn.visibility = View.VISIBLE
+                progressbar.visibility = View.INVISIBLE
             }
         }, 1000
         )
