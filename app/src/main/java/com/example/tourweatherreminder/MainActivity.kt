@@ -11,6 +11,9 @@ import android.os.Handler
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View.*
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,8 +26,10 @@ import com.example.tourweatherreminder.model.MyJobService
 import com.example.tourweatherreminder.model.makeNotification
 import com.example.tourweatherreminder.model.notificationContent
 import com.example.tourweatherreminder.model.notificationResultCnt
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.find
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
@@ -39,6 +44,8 @@ var timeStamp: Long? = null
 lateinit var timelineRecyclerAdapter: TimelineRecyclerAdapter
 lateinit var recyclerView: RecyclerView
 lateinit var updatetime: TextView
+lateinit var refreshbtn: ImageView
+lateinit var progressbar:ProgressBar
 var ScheduleList: ArrayList<ScheduleEntity> = arrayListOf()
 
 //var WeatherList: ArrayList<String> = arrayListOf()
@@ -56,6 +63,8 @@ class MainActivity : AppCompatActivity() {
         mContext = this.applicationContext
         recyclerView = this.findViewById(R.id.recycler_view)
         updatetime = this.findViewById(R.id.updateTime)
+        refreshbtn = this.findViewById(R.id.refreshBtn)
+        progressbar = this.findViewById(R.id.progressBar2)
 
 
         val bottomAppBar = findViewById(R.id.appBar) as BottomAppBar
@@ -89,7 +98,7 @@ class MainActivity : AppCompatActivity() {
         val js = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
         val serviceComponent = ComponentName(this, MyJobService::class.java)
         val jobInfo = JobInfo.Builder(22, serviceComponent)
-            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
+//            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
             .setPeriodic(TimeUnit.MINUTES.toMillis(15))
 //            .setPersisted(true)
             .build()
@@ -198,6 +207,9 @@ class MainActivity : AppCompatActivity() {
     fun updateAllSchedule() {
         Handler().postDelayed(Runnable
         {
+            refreshBtn.visibility = INVISIBLE
+            progressBar2.visibility = VISIBLE
+
             notificationContent = ""
             notificationResultCnt = 0
             // 모든 날씨 정보를 다시 받아오는 작업

@@ -37,6 +37,6 @@ class MyJobService : JobService() {
 
     override fun onStopJob(params: JobParameters): Boolean {
         Log.d("로그", "onStopJob: ${params.jobId}")
-        return false
+        return true
     }
 }

@@ -1,10 +1,14 @@
 package com.example.tourweatherreminder.model
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.tourweatherreminder.MainActivity
 import com.example.tourweatherreminder.R
 import com.example.tourweatherreminder.mContext
 
@@ -30,12 +34,24 @@ fun makeNotification() {
     val title = "날씨 알림이"
     val content = notificationContent
 
+    val notifyIntent = Intent(mContext, MainActivity::class.java).apply {
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    }
+    val notifyPendingIntent = PendingIntent.getActivity(
+        mContext, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
     val builder = NotificationCompat.Builder(mContext, CHANNEL_ID)
-    builder.setSmallIcon(R.drawable.icon01)
+    builder.setSmallIcon(R.mipmap.ic_launcher)
     builder.setContentTitle(title)
     builder.setContentText(content)
+    builder.setContentIntent(notifyPendingIntent)
     builder.priority = NotificationCompat.PRIORITY_HIGH
     builder.setAutoCancel(true)
+    builder.setStyle(
+        NotificationCompat.BigTextStyle()
+            .bigText(content)
+    )
 
     val notificationManager = NotificationManagerCompat.from(mContext)
     notificationManager.notify(notiId, builder.build())

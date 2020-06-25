@@ -5,11 +5,13 @@ import android.content.Context
 
 import android.os.AsyncTask
 import android.util.Log
+import android.view.View
 import com.example.tourweatherreminder.db.AppDatabase
 import com.example.tourweatherreminder.db.entity.ScheduleEntity
 import com.example.tourweatherreminder.model.makeNotification
 import com.example.tourweatherreminder.model.notificationContent
 import com.example.tourweatherreminder.model.notificationResultCnt
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -115,7 +117,7 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
                 } else {
 
                     if (isTitle.weather != null && isTitle.weather != scheduleEntity.weather) {
-                        notificationContent += "${isTitle.title} 날씨 정보가 변경되었습니다.\n"
+                        notificationContent += "${isTitle.title} 일정의 날씨 정보가 변경되었습니다.\n"
                         Log.i("로그 ", "날씨바뀜")
                     }
                     appDatabase?.updateSchedule(scheduleEntity)
@@ -131,6 +133,8 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
             val formatted = current.format(formatter)
             updatetime.setText(formatted)
+            refreshbtn.visibility =View.VISIBLE
+            progressbar.visibility = View.INVISIBLE
         }
 
     }
