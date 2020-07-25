@@ -23,11 +23,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tourweatherreminder.MainActivity.resetSchedule.resetAdapter
 import com.example.tourweatherreminder.db.AppDatabase
 import com.example.tourweatherreminder.db.entity.ScheduleEntity
-import com.example.tourweatherreminder.model.MyJobService
-import com.example.tourweatherreminder.model.makeNotification
+//import com.example.tourweatherreminder.model.MyJobService
+//import com.example.tourweatherreminder.model.makeNotification
 import com.example.tourweatherreminder.model.notificationContent
 import com.example.tourweatherreminder.model.notificationResultCnt
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException
+//import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.find
@@ -37,8 +37,12 @@ import java.util.concurrent.TimeUnit
 
 var dailyWeatherArray = arrayListOf<WeatherData>()
 var hourlyWeatherArray = arrayListOf<WeatherData>()
+private val nothing1 = null
+
+private val nothing = null
+
 var leastDiffData: WeatherData? = null
-var now = System.currentTimeMillis() / 1000
+var now = System.currentTimeMillis() // 1000
 var isHourly = false
 var timeStamp: Long? = null
 
@@ -95,15 +99,15 @@ class MainActivity : AppCompatActivity() {
 //            .build()
 //        js.schedule(jobInfo)
 
-        // 일정주기마다 JobScheduler 실행
-        val js = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-        val serviceComponent = ComponentName(this, MyJobService::class.java)
-        val jobInfo = JobInfo.Builder(22, serviceComponent)
-//            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
-            .setPeriodic(TimeUnit.MINUTES.toMillis(30))
-//            .setPersisted(true)
-            .build()
-        js.schedule(jobInfo)
+//        // 일정주기마다 JobScheduler 실행
+//        val js = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+//        val serviceComponent = ComponentName(this, MyJobService::class.java)
+//        val jobInfo = JobInfo.Builder(22, serviceComponent)
+////            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
+//            .setPeriodic(TimeUnit.MINUTES.toMillis(30))
+////            .setPersisted(true)
+//            .build()
+//        js.schedule(jobInfo)
 
 
         refreshBtn.setOnClickListener {

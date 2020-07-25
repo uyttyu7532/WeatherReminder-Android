@@ -37,7 +37,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'pl.hypeapp:materialtimelineview:1.1'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.0.ㅎ0'
+    implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.jzxiang.pickerview:TimePickerDialog:1.0.1'
     implementation "org.jetbrains.anko:anko-appcompat-v7-commons:0.10.8"
     implementation 'com.github.Mindinventory:VanillaPlacePicker:0.1.0'

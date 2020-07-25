@@ -8,7 +8,7 @@ import android.util.Log
 import android.view.View
 import com.example.tourweatherreminder.db.AppDatabase
 import com.example.tourweatherreminder.db.entity.ScheduleEntity
-import com.example.tourweatherreminder.model.makeNotification
+//import com.example.tourweatherreminder.model.makeNotification
 import com.example.tourweatherreminder.model.notificationContent
 import com.example.tourweatherreminder.model.notificationResultCnt
 import kotlinx.android.synthetic.main.activity_main.*
@@ -128,7 +128,7 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
 
 
         if (notificationResultCnt == ScheduleList.size) {
-            makeNotification()
+//            makeNotification()
             val current = LocalDateTime.now()
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
             val formatted = current.format(formatter)
