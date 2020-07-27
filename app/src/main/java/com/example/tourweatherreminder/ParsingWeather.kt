@@ -2,8 +2,10 @@ package com.example.tourweatherreminder
 
 
 import android.content.Context
+import android.content.res.Resources
 
 import android.os.AsyncTask
+import android.provider.Settings.Global.getString
 import android.util.Log
 import android.view.View
 import com.example.tourweatherreminder.db.AppDatabase
@@ -41,7 +43,7 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
             isPast = false
 
             var url =
-                URL("https://api.openweathermap.org/data/2.5/onecall?lat=${params[0].latitude}&lon=${params[0].longitude}&&appid=0278d360e035caa40fc3debf63523512&units=metric&exclude=minutely,current")
+                URL("https://api.openweathermap.org/data/2.5/onecall?lat=${params[0].latitude}&lon=${params[0].longitude}&&appid=${R.string.openWeatherApiKey}&units=metric&exclude=minutely,current")
             val doc = Jsoup.connect(url.toString()).ignoreContentType(true).get()
             val json = JSONObject(doc.text())
 
