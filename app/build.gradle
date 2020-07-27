@@ -16,7 +16,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "GOOGLE_MAP_API_KEY", "AIzaSyDEbtPs2yTG7J9Pm4QKF35KhyGuergPxKo"
 
 
         buildTypes {
