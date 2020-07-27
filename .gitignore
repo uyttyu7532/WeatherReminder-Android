@@ -12,7 +12,6 @@
 /captures
 .externalNativeBuild
 .cxx
-/app/src/debug/res/values
-/app/src/release/res/values
+
 
 
