@@ -9,7 +9,7 @@ apply plugin: 'kotlin-android-extensions'
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 def googleMapApiKey = properties.getProperty('google.map.key')
-def openWeatherApiKey = properties.getProperty('openweather.key')
+
 
 android {
     compileSdkVersion 28
@@ -25,6 +25,10 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        manifestPlaceholders = [googleMapApiKey:googleMapApiKey]
+//        def openWeatherApiKey = properties.getProperty('openweather.key')
+        buildConfigField "String", "API_KEY", properties['openweather.key']
+//        resValue 'string', 'weather_api_key', openWeatherApiKey
 
         buildTypes {
             release {
@@ -32,8 +36,7 @@ android {
                 proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             }
         }
-        manifestPlaceholders = [googleMapApiKey:googleMapApiKey]
-        resValue "string", "openWeatherApiKey", properties.getProperty("openWeatherApiKey", openWeatherApiKey)
+
     }
 
     dependencies {

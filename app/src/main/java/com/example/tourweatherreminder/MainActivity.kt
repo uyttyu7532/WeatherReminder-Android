@@ -6,6 +6,8 @@ import android.app.job.JobScheduler
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.net.wifi.WifiConfiguration.AuthAlgorithm.strings
+import android.net.wifi.WifiConfiguration.GroupCipher.strings
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -91,6 +93,8 @@ class MainActivity : AppCompatActivity() {
 
 
     fun init() {
+
+//        Log.i("로그", BuildConfig)
 //        val js = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
 //        val serviceComponent = ComponentName(this, MyJobService::class.java)
 //        val jobInfo = JobInfo.Builder(22, serviceComponent)

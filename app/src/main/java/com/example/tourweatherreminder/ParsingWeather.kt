@@ -42,8 +42,9 @@ class MainAsyncTask(context: Context) : AsyncTask<ScheduleEntity, Unit, Schedule
         } else {
             isPast = false
 
-            var url =
-                URL("https://api.openweathermap.org/data/2.5/onecall?lat=${params[0].latitude}&lon=${params[0].longitude}&&appid=${R.string.openWeatherApiKey}&units=metric&exclude=minutely,current")
+//            Log.i("로그",R.string.weather_api_key.toString())
+
+            var url = URL("https://api.openweathermap.org/data/2.5/onecall?lat=${params[0].latitude}&lon=${params[0].longitude}&&appid=0278d360e035caa40fc3debf63523512&units=metric&exclude=minutely,current")
             val doc = Jsoup.connect(url.toString()).ignoreContentType(true).get()
             val json = JSONObject(doc.text())
 
