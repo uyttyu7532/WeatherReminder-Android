@@ -94,7 +94,6 @@ class MainActivity : AppCompatActivity() {
 
     fun init() {
 
-//        Log.i("로그", BuildConfig)
 //        val js = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
 //        val serviceComponent = ComponentName(this, MyJobService::class.java)
 //        val jobInfo = JobInfo.Builder(22, serviceComponent)
